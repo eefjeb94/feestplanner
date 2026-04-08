@@ -4,37 +4,65 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Voorbeeldfeestjes — Kinderfeest ideeën per thema | Feestplanner</title>
-<meta name="description" content="Bekijk complete voorbeeldplannen voor kinderfeestjes: dinosaurus, prinsessen, ruimte, jungle en meer. Gratis te gebruiken als inspiratie.">
-<link rel="canonical" href="https://feestplanner.nl/voorbeelden">
-<script type="application/ld+json">
-{"@context":"https://schema.org","@type":"CollectionPage","name":"Voorbeeldfeestjes","description":"Complete kinderfeest voorbeeldplannen per thema"}
-</script>
+<meta name="description" content="Bekijk complete voorbeeldplannen voor kinderfeestjes: dinosaurus, prinsessen, ruimte, jungle en meer.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,900;1,700&family=DM+Sans:wght@300;400;500&family=Dancing+Script:wght@700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="shared.css">
 <style>
-  .filter-bar { display:flex; gap:.5rem; flex-wrap:wrap; margin-bottom:2.5rem; }
-  .filter-btn { background:var(--white); color:var(--text-muted); border:1px solid var(--border); border-radius:99px; padding:8px 18px; font-size:13px; font-weight:500; font-family:'DM Sans',sans-serif; cursor:pointer; transition:all .2s; }
-  .filter-btn.active,.filter-btn:hover { background:var(--rose); color:white; border-color:var(--rose); }
-  .examples-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:1.5rem; }
-  .example-card { background:var(--white); border-radius:var(--radius-lg); overflow:hidden; border:1px solid var(--border); transition:transform .2s; text-decoration:none; display:block; }
-  .example-card:hover { transform:translateY(-4px); }
-  .example-img { height:200px; display:flex; align-items:center; justify-content:center; font-size:80px; }
-  .example-body { padding:1.5rem; }
-  .example-theme-tag { font-size:11px; font-weight:500; letter-spacing:.08em; text-transform:uppercase; color:var(--rose); margin-bottom:.5rem; }
-  .example-title { font-family:'Playfair Display',serif; font-size:22px; font-weight:700; color:var(--text); margin-bottom:.5rem; }
-  .example-subtitle { font-family:'Dancing Script',cursive; font-size:20px; color:var(--coral); margin-bottom:.75rem; display:block; }
-  .example-meta { font-size:13px; color:var(--text-muted); margin-bottom:1rem; }
-  .example-desc { font-size:13px; color:var(--text-muted); line-height:1.6; margin-bottom:1rem; }
-  .example-tags { display:flex; flex-wrap:wrap; gap:6px; }
-  .age-badge { display:inline-block; background:var(--rose); color:white; font-size:11px; font-weight:500; padding:4px 10px; border-radius:99px; margin-bottom:1rem; }
-  @media(max-width:900px){ .examples-grid{grid-template-columns:1fr 1fr} }
-  @media(max-width:600px){ .examples-grid{grid-template-columns:1fr} }
+:root{--cream:#FDF6F0;--rose:#D4537E;--rose-light:#FBEAF0;--rose-mid:#F4C0D1;--burgundy:#8B3A52;--mint:#B8E0D2;--mint-light:#E8F5F0;--yellow:#FAE8C0;--coral:#E8836A;--dark:#2C1F18;--white:#fff;--text:#3A2920;--text-muted:#9A8070;--border:rgba(212,83,126,0.13);--radius:16px;--radius-lg:24px;}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'DM Sans',sans-serif;background:var(--cream);color:var(--text);overflow-x:hidden}
+nav{display:flex;align-items:center;justify-content:space-between;padding:1.25rem 3rem;background:var(--white);border-bottom:.5px solid var(--border);position:sticky;top:0;z-index:100}
+.nav-logo{font-family:'Dancing Script',cursive;font-size:24px;color:var(--rose);text-decoration:none;display:flex;flex-direction:column;line-height:1}
+.nav-logo span{font-family:'DM Sans',sans-serif;font-size:10px;font-weight:500;letter-spacing:.1em;text-transform:uppercase;color:var(--text-muted);margin-top:2px}
+.nav-links{display:flex;gap:2rem;list-style:none}
+.nav-links a{font-size:13px;font-weight:500;color:var(--text-muted);text-decoration:none}
+.nav-links a:hover,.nav-links a.active{color:var(--rose)}
+.nav-cta{background:var(--rose);color:white;border:none;border-radius:99px;padding:9px 22px;font-size:13px;font-weight:500;font-family:'DM Sans',sans-serif;cursor:pointer;text-decoration:none;display:inline-block}
+.page-header{padding:3.5rem 3rem 2.5rem;background:var(--white);border-bottom:.5px solid var(--border)}
+.ph-inner{max-width:960px;margin:0 auto}
+.breadcrumb{font-size:12px;color:var(--text-muted);margin-bottom:1rem}
+.breadcrumb a{color:var(--rose);text-decoration:none}
+.sec-eye{font-size:11px;font-weight:500;letter-spacing:.12em;text-transform:uppercase;color:var(--rose);display:block;margin-bottom:.75rem}
+.sec-title{font-family:'Playfair Display',serif;font-size:clamp(26px,3.5vw,40px);font-weight:700;color:var(--text);margin-bottom:.75rem}
+.sec-title em{font-style:italic;color:var(--rose)}
+.main{max-width:960px;margin:0 auto;padding:3rem}
+.filter-bar{display:flex;gap:.5rem;flex-wrap:wrap;margin-bottom:2.5rem}
+.fb{background:var(--white);color:var(--text-muted);border:1px solid var(--border);border-radius:99px;padding:8px 18px;font-size:13px;font-weight:500;font-family:'DM Sans',sans-serif;cursor:pointer;transition:all .2s}
+.fb.active,.fb:hover{background:var(--rose);color:white;border-color:var(--rose)}
+.grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1.5rem}
+.card{background:var(--white);border-radius:var(--radius-lg);overflow:hidden;border:.5px solid var(--border);transition:transform .2s;text-decoration:none;display:block}
+.card:hover{transform:translateY(-4px)}
+.ci{height:200px;display:flex;align-items:center;justify-content:center;font-size:80px}
+.cb{padding:1.5rem}
+.cc{font-size:10px;font-weight:500;letter-spacing:.08em;text-transform:uppercase;color:var(--rose);margin-bottom:.5rem}
+.ct{font-family:'Playfair Display',serif;font-size:21px;font-weight:700;color:var(--text);margin-bottom:.25rem}
+.cs{font-family:'Dancing Script',cursive;font-size:19px;color:var(--coral);margin-bottom:.5rem;display:block}
+.cm{font-size:13px;color:var(--text-muted);margin-bottom:.875rem}
+.tags{display:flex;flex-wrap:wrap;gap:5px}
+.tag{background:var(--rose-light);color:var(--burgundy);font-size:11px;font-weight:500;padding:3px 10px;border-radius:99px}
+.tag.m{background:var(--mint-light);color:#1a6b50}
+.tag.y{background:var(--yellow);color:#7a5a10}
+.ab{display:inline-block;background:var(--rose);color:white;font-size:11px;font-weight:500;padding:4px 10px;border-radius:99px;margin-bottom:.75rem}
+.cta{background:var(--white);border:1px solid var(--border);border-radius:var(--radius-lg);padding:2.5rem;text-align:center;margin-top:2.5rem}
+.cta h3{font-family:'Playfair Display',serif;font-size:24px;font-weight:700;color:var(--text);margin-bottom:.5rem}
+.cta p{font-size:14px;color:var(--text-muted);margin-bottom:1.5rem}
+.btn-p{background:var(--rose);color:white;border-radius:99px;padding:13px 26px;font-size:15px;font-weight:500;text-decoration:none;display:inline-block}
+.nl{background:var(--rose);padding:4rem 3rem;text-align:center}
+.nl h2{font-family:'Playfair Display',serif;font-size:30px;font-weight:700;color:white;margin-bottom:.75rem}
+.nl p{color:rgba(255,255,255,.8);margin-bottom:2rem}
+.nlf{display:flex;gap:.75rem;max-width:440px;margin:0 auto}
+.nlf input{flex:1;padding:12px 16px;border-radius:99px;border:none;font-size:15px;font-family:'DM Sans',sans-serif}
+.nlf button{background:var(--dark);color:white;border:none;border-radius:99px;padding:12px 22px;font-size:14px;font-weight:500;font-family:'DM Sans',sans-serif;cursor:pointer}
+footer{background:var(--dark);padding:2.5rem 3rem;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:1rem}
+.fl{font-family:'Dancing Script',cursive;font-size:22px;color:var(--rose)}
+.fls{display:flex;gap:1.5rem}
+.fls a{font-size:13px;color:rgba(255,255,255,.5);text-decoration:none}
+.fc{font-size:12px;color:rgba(255,255,255,.3)}
+@media(max-width:900px){nav{padding:1rem 1.5rem}.nav-links{display:none}.page-header,.main,.nl{padding-left:1.5rem;padding-right:1.5rem}.grid{grid-template-columns:1fr 1fr}}
+@media(max-width:600px){.grid{grid-template-columns:1fr}}
 </style>
 </head>
 <body>
-
 <nav>
   <a href="index.html" class="nav-logo">Feestplanner<span>Planning met plezier</span></a>
   <ul class="nav-links">
@@ -44,188 +72,81 @@
   </ul>
   <a href="index.html#form" class="nav-cta">Start gratis</a>
 </nav>
-
 <div class="page-header">
-  <div class="page-header-inner">
-    <div class="breadcrumb"><a href="index.html">Home</a> <span>›</span> Voorbeeldplannen</div>
-    <span class="section-eyebrow">Inspiratie per thema</span>
-    <h1 class="section-title">Complete <em>voorbeeldfeestjes.</em></h1>
-    <p class="section-desc">Elk voorbeeldplan is volledig uitgewerkt: concept, setup, eten, activiteiten en boodschappenlijst. Gebruik het als inspiratie of genereer jouw eigen versie.</p>
+  <div class="ph-inner">
+    <div class="breadcrumb"><a href="index.html">Home</a> › Voorbeeldplannen</div>
+    <span class="sec-eye">Inspiratie per thema</span>
+    <h1 class="sec-title">Complete <em>voorbeeldfeestjes.</em></h1>
+    <p style="font-size:15px;color:var(--text-muted);line-height:1.7;max-width:560px">Elk voorbeeldplan is volledig uitgewerkt: concept, setup, eten, activiteiten en boodschappenlijst. Gebruik het als inspiratie of genereer jouw eigen versie.</p>
   </div>
 </div>
-
-<section style="padding:3rem;max-width:980px;margin:0 auto;">
+<div class="main">
   <div class="filter-bar">
-    <button class="filter-btn active" onclick="filterCards('all',this)">Alle thema's</button>
-    <button class="filter-btn" onclick="filterCards('avontuur',this)">Avontuur</button>
-    <button class="filter-btn" onclick="filterCards('magisch',this)">Magisch</button>
-    <button class="filter-btn" onclick="filterCards('natuur',this)">Natuur</button>
-    <button class="filter-btn" onclick="filterCards('sport',this)">Sport & actief</button>
-    <button class="filter-btn" onclick="filterCards('creatief',this)">Creatief</button>
+    <button class="fb active" onclick="f('all',this)">Alle thema's</button>
+    <button class="fb" onclick="f('avontuur',this)">Avontuur</button>
+    <button class="fb" onclick="f('magisch',this)">Magisch</button>
+    <button class="fb" onclick="f('natuur',this)">Natuur</button>
+    <button class="fb" onclick="f('sport',this)">Sport & actief</button>
+    <button class="fb" onclick="f('creatief',this)">Creatief</button>
   </div>
-
-  <div class="examples-grid" id="examples-grid">
-
-    <a href="voorbeelden/dinosaurus-feestje.html" class="example-card" data-cat="avontuur natuur">
-      <div class="example-img" style="background:#EAF3DE;">🦕</div>
-      <div class="example-body">
-        <div class="age-badge">3–7 jaar</div>
-        <div class="example-theme-tag">Avontuur & natuur</div>
-        <div class="example-title">Dino Expedition</div>
-        <span class="example-subtitle">Fossiel avontuur</span>
-        <div class="example-meta">Tuin of park · 8–12 kinderen · €100–€150</div>
-        <div class="example-desc">Groene jungle-sfeer met kartonnen dinosaurussen, fossiel-opgraving en dino-ei verf-activiteit.</div>
-        <div class="example-tags"><span class="etag m">Buiten</span><span class="etag">DIY-vriendelijk</span><span class="etag y">Budget</span></div>
-      </div>
+  <div class="grid" id="grid">
+    <a href="voorbeelden/dinosaurus-feestje.html" class="card" data-cat="avontuur natuur">
+      <div class="ci" style="background:#EAF3DE">🦕</div>
+      <div class="cb"><div class="ab">3–7 jaar</div><div class="cc">Avontuur & natuur</div><div class="ct">Dino Expedition</div><span class="cs">Fossiel avontuur</span><div class="cm">Tuin of park · 8–12 kinderen · €100–€150</div><div class="tags"><span class="tag m">Buiten</span><span class="tag">DIY-vriendelijk</span><span class="tag y">Budget</span></div></div>
     </a>
-
-    <a href="voorbeelden/prinsessen-feestje.html" class="example-card" data-cat="magisch creatief">
-      <div class="example-img" style="background:#FBEAF0;">👑</div>
-      <div class="example-body">
-        <div class="age-badge">4–8 jaar</div>
-        <div class="example-theme-tag">Magisch & sprookjesachtig</div>
-        <div class="example-title">Royal Garden Party</div>
-        <span class="example-subtitle">Prinsessen dromenland</span>
-        <div class="example-meta">Thuis of tuin · 8–12 kinderen · €150–€250</div>
-        <div class="example-desc">Roze en goud met bloemenkransen, prinsessen-tiara workshop en een royal afternoon tea setup.</div>
-        <div class="example-tags"><span class="etag">Pinterest-stijl</span><span class="etag m">Elegant</span></div>
-      </div>
+    <a href="voorbeelden/prinsessen-feestje.html" class="card" data-cat="magisch creatief">
+      <div class="ci" style="background:#FBEAF0">👑</div>
+      <div class="cb"><div class="ab">4–8 jaar</div><div class="cc">Magisch & sprookjes</div><div class="ct">Royal Garden Party</div><span class="cs">Prinsessen dromenland</span><div class="cm">Thuis of tuin · 8–12 kinderen · €150–€250</div><div class="tags"><span class="tag">Pinterest-stijl</span><span class="tag m">Elegant</span></div></div>
     </a>
-
-    <a href="voorbeelden/ruimte-feestje.html" class="example-card" data-cat="avontuur creatief">
-      <div class="example-img" style="background:#E6F1FB;">🚀</div>
-      <div class="example-body">
-        <div class="age-badge">5–9 jaar</div>
-        <div class="example-theme-tag">Avontuur & wetenschap</div>
-        <div class="example-title">Space Mission Party</div>
-        <span class="example-subtitle">Galactisch avontuur</span>
-        <div class="example-meta">Binnen · 8–15 kinderen · €100–€150</div>
-        <div class="example-desc">Donkerblauw met zilveren sterren, ruimtehelm knutselen en een raket-cake met rook-effect.</div>
-        <div class="example-tags"><span class="etag">Wetenschap</span><span class="etag y">Jongens & meisjes</span></div>
-      </div>
+    <a href="voorbeelden/ruimte-feestje.html" class="card" data-cat="avontuur creatief">
+      <div class="ci" style="background:#E6F1FB">🚀</div>
+      <div class="cb"><div class="ab">5–9 jaar</div><div class="cc">Avontuur & wetenschap</div><div class="ct">Space Mission Party</div><span class="cs">Galactisch avontuur</span><div class="cm">Binnen · 8–15 kinderen · €100–€150</div><div class="tags"><span class="tag">Jongens & meisjes</span><span class="tag y">Budget</span></div></div>
     </a>
-
-    <a href="voorbeelden/jungle-feestje.html" class="example-card" data-cat="natuur avontuur">
-      <div class="example-img" style="background:#EAF3DE;">🌿</div>
-      <div class="example-body">
-        <div class="age-badge">3–7 jaar</div>
-        <div class="example-theme-tag">Natuur & avontuur</div>
-        <div class="example-title">Wild Jungle Explorer</div>
-        <span class="example-subtitle">Tropisch wildernisfeest</span>
-        <div class="example-meta">Tuin of park · 10–20 kinderen · €100–€200</div>
-        <div class="example-desc">Groen met tropische bloemen, dierenmasker knutselen en een safari-speurtocht door de tuin.</div>
-        <div class="example-tags"><span class="etag m">Buiten</span><span class="etag">Actief</span><span class="etag y">Groot gezelschap</span></div>
-      </div>
+    <a href="voorbeelden/jungle-feestje.html" class="card" data-cat="natuur avontuur">
+      <div class="ci" style="background:#EAF3DE">🌿</div>
+      <div class="cb"><div class="ab">3–7 jaar</div><div class="cc">Natuur & avontuur</div><div class="ct">Wild Jungle Explorer</div><span class="cs">Tropisch wildernisfeest</span><div class="cm">Tuin of park · 10–20 kinderen · €100–€200</div><div class="tags"><span class="tag m">Buiten</span><span class="tag">Actief</span><span class="tag y">Groot gezelschap</span></div></div>
     </a>
-
-    <a href="voorbeelden/zeemeermin-feestje.html" class="example-card" data-cat="magisch creatief">
-      <div class="example-img" style="background:#E1F5EE;">🧜</div>
-      <div class="example-body">
-        <div class="age-badge">4–8 jaar</div>
-        <div class="example-theme-tag">Magisch & zee</div>
-        <div class="example-title">Mermaid Dreams</div>
-        <span class="example-subtitle">Onderwaterprinsessen</span>
-        <div class="example-meta">Thuis of zwembad · 8–12 kinderen · €150–€200</div>
-        <div class="example-desc">Turquoise, paars en goud met schelpendecoratie, staart-kostuums en een ombre blauwe taart.</div>
-        <div class="example-tags"><span class="etag m">Zomer</span><span class="etag">Kleurrijk</span></div>
-      </div>
+    <a href="voorbeelden/zeemeermin-feestje.html" class="card" data-cat="magisch creatief">
+      <div class="ci" style="background:#E1F5EE">🧜</div>
+      <div class="cb"><div class="ab">4–8 jaar</div><div class="cc">Magisch & zee</div><div class="ct">Mermaid Dreams</div><span class="cs">Onderwaterprinsessen</span><div class="cm">Thuis · 8–12 kinderen · €150–€200</div><div class="tags"><span class="tag m">Zomer</span><span class="tag">Kleurrijk</span></div></div>
     </a>
-
-    <a href="voorbeelden/boerderij-feestje.html" class="example-card" data-cat="natuur">
-      <div class="example-img" style="background:#FAE8C0;">🐄</div>
-      <div class="example-body">
-        <div class="age-badge">1–5 jaar</div>
-        <div class="example-theme-tag">Natuur & boerderij</div>
-        <div class="example-title">Little Farm Party</div>
-        <span class="example-subtitle">Boerderij vriendjes</span>
-        <div class="example-meta">Tuin of thuis · 5–10 kinderen · €75–€125</div>
-        <div class="example-desc">Rood, wit en geel met strobalen, hout en papieren dieren. Perfect voor de allerkleinsten.</div>
-        <div class="example-tags"><span class="etag y">Peuters</span><span class="etag">Rustiek</span><span class="etag m">Budget</span></div>
-      </div>
+    <a href="voorbeelden/boerderij-feestje.html" class="card" data-cat="natuur">
+      <div class="ci" style="background:#FAE8C0">🐄</div>
+      <div class="cb"><div class="ab">1–5 jaar</div><div class="cc">Natuur & boerderij</div><div class="ct">Little Farm Party</div><span class="cs">Boerderij vriendjes</span><div class="cm">Tuin of thuis · 5–10 kinderen · €75–€125</div><div class="tags"><span class="tag y">Peuters</span><span class="tag">Rustiek</span><span class="tag m">Budget</span></div></div>
     </a>
-
-    <a href="voorbeelden/circus-feestje.html" class="example-card" data-cat="creatief avontuur">
-      <div class="example-img" style="background:#FBEAF0;">🎪</div>
-      <div class="example-body">
-        <div class="age-badge">4–9 jaar</div>
-        <div class="example-theme-tag">Circus & entertainment</div>
-        <div class="example-title">The Big Top Circus</div>
-        <span class="example-subtitle">Klassiek circusfeest</span>
-        <div class="example-meta">Tuin of feestzaal · 10–20 kinderen · €150–€250</div>
-        <div class="example-desc">Rood, wit en goud met popcorn cones, clown-schmink station en acrobatische spelletjes.</div>
-        <div class="example-tags"><span class="etag">Groot feest</span><span class="etag m">Actief</span><span class="etag y">Klassiek</span></div>
-      </div>
+    <a href="voorbeelden/circus-feestje.html" class="card" data-cat="creatief avontuur">
+      <div class="ci" style="background:#FBEAF0">🎪</div>
+      <div class="cb"><div class="ab">4–9 jaar</div><div class="cc">Circus & entertainment</div><div class="ct">The Big Top Circus</div><span class="cs">Klassiek circusfeest</span><div class="cm">Tuin of feestzaal · 10–20 kinderen · €150–€250</div><div class="tags"><span class="tag">Groot feest</span><span class="tag m">Actief</span></div></div>
     </a>
-
-    <a href="voorbeelden/auto-feestje.html" class="example-card" data-cat="sport avontuur">
-      <div class="example-img" style="background:#FDF6F0;">🚗</div>
-      <div class="example-body">
-        <div class="age-badge">2–6 jaar</div>
-        <div class="example-theme-tag">Voertuigen & snelheid</div>
-        <div class="example-title">Raceday Party</div>
-        <span class="example-subtitle">Formule 1 feestje</span>
-        <div class="example-meta">Thuis of tuin · 8–15 kinderen · €100–€150</div>
-        <div class="example-desc">Zwart, rood en geel met race-circuit op de grond, auto knutselen en een racewagen cake.</div>
-        <div class="example-tags"><span class="etag">Jongens</span><span class="etag m">Actief</span><span class="etag y">Simpel</span></div>
-      </div>
+    <a href="voorbeelden/auto-feestje.html" class="card" data-cat="sport avontuur">
+      <div class="ci" style="background:#FDF6F0">🚗</div>
+      <div class="cb"><div class="ab">2–6 jaar</div><div class="cc">Voertuigen & snelheid</div><div class="ct">Raceday Party</div><span class="cs">Formule 1 feestje</span><div class="cm">Thuis of tuin · 8–15 kinderen · €100–€150</div><div class="tags"><span class="tag">Jongens</span><span class="tag m">Actief</span></div></div>
     </a>
-
-    <a href="voorbeelden/regenboog-feestje.html" class="example-card" data-cat="creatief magisch">
-      <div class="example-img" style="background:linear-gradient(135deg,#FBEAF0,#E8F5F0,#FAE8C0);">🌈</div>
-      <div class="example-body">
-        <div class="age-badge">3–7 jaar</div>
-        <div class="example-theme-tag">Kleurrijk & vrolijk</div>
-        <div class="example-title">Rainbow Wonderland</div>
-        <span class="example-subtitle">Alle kleuren van de regenboog</span>
-        <div class="example-meta">Thuis · 8–12 kinderen · €75–€125</div>
-        <div class="example-desc">Alle regenboogkleuren met fruit-snoeptafel, tie-dye T-shirts verven en een regenboog smash cake.</div>
-        <div class="example-tags"><span class="etag">Kleurrijk</span><span class="etag m">DIY</span><span class="etag y">Budget</span></div>
-      </div>
+    <a href="voorbeelden/regenboog-feestje.html" class="card" data-cat="creatief magisch">
+      <div class="ci" style="background:linear-gradient(135deg,#FBEAF0,#E8F5F0,#FAE8C0)">🌈</div>
+      <div class="cb"><div class="ab">3–7 jaar</div><div class="cc">Kleurrijk & vrolijk</div><div class="ct">Rainbow Wonderland</div><span class="cs">Alle kleuren van de regenboog</span><div class="cm">Thuis · 8–12 kinderen · €75–€125</div><div class="tags"><span class="tag">Kleurrijk</span><span class="tag m">DIY</span><span class="tag y">Budget</span></div></div>
     </a>
-
   </div>
-
-  <div style="text-align:center;margin-top:3rem;padding:3rem;background:var(--white);border-radius:var(--radius-lg);border:1px solid var(--border);">
-    <p style="font-size:14px;color:var(--text-muted);margin-bottom:1rem;">Jouw thema staat er niet tussen?</p>
-    <h3 style="font-family:'Playfair Display',serif;font-size:24px;font-weight:700;color:var(--text);margin-bottom:.75rem;">Maak een <em style="color:var(--rose);">eigen plan.</em></h3>
-    <p style="font-size:14px;color:var(--text-muted);margin-bottom:1.5rem;">Ons AI-systeem kan elk thema uitwerken — van Pokémon tot ballet, van voetbal tot sprookjesbos.</p>
-    <a href="index.html#form" class="btn-primary">Start mijn plan gratis</a>
+  <div class="cta">
+    <h3>Jouw thema staat er niet tussen?</h3>
+    <p>Ons AI-systeem kan elk thema uitwerken — van Pokémon tot ballet, van voetbal tot sprookjesbos.</p>
+    <a href="index.html#form" class="btn-p">Maak mijn eigen plan gratis →</a>
   </div>
+</div>
+<section class="nl">
+  <h2>Nieuwe voorbeelden elke maand.</h2>
+  <p>Schrijf je in en mis niets.</p>
+  <div class="nlf"><input type="email" id="e" placeholder="jouw@emailadres.be"><button onclick="s()">Inschrijven</button></div>
+  <p id="ok" style="display:none;margin-top:1rem;font-size:13px;color:rgba(255,255,255,.8)">Bedankt! 🎉</p>
 </section>
-
-<section class="newsletter-section">
-  <h2>Nieuwe voorbeelden<br>elke maand.</h2>
-  <p>We voegen maandelijks nieuwe thema's toe. Schrijf je in en mis niets.</p>
-  <div class="newsletter-form">
-    <input type="email" id="newsletter-email" placeholder="jouw@emailadres.be">
-    <button onclick="subscribeNewsletter()">Inschrijven</button>
-  </div>
-  <p id="newsletter-msg" style="margin-top:1rem;font-size:13px;color:rgba(255,255,255,0.8);display:none;">Bedankt! 🎉</p>
-</section>
-
 <footer>
-  <div class="footer-grid">
-    <div><a href="index.html" class="footer-brand">Feestplanner</a><p class="footer-desc">Het meest complete feestplanningsplatform voor ouders in België en Nederland.</p></div>
-    <div class="footer-col"><h4>Tool</h4><a href="index.html#form">Maak een plan</a><a href="voorbeelden.html">Voorbeelden</a><a href="blog.html">Blog</a></div>
-    <div class="footer-col"><h4>Thema's</h4><a href="voorbeelden/dinosaurus-feestje.html">Dinosaurus</a><a href="voorbeelden/prinsessen-feestje.html">Prinsessen</a><a href="voorbeelden/ruimte-feestje.html">Ruimte</a><a href="voorbeelden/jungle-feestje.html">Jungle</a></div>
-    <div class="footer-col"><h4>Info</h4><a href="#">Over ons</a><a href="#">Privacy</a><a href="#">Contact</a></div>
-  </div>
-  <div class="footer-bottom"><span class="footer-copy">© 2025 Feestplanner</span><span class="footer-copy">Gemaakt met ♥ in België</span></div>
+  <span class="fl">Feestplanner</span>
+  <div class="fls"><a href="index.html#form">Plan maken</a><a href="voorbeelden.html">Voorbeelden</a><a href="blog.html">Blog</a></div>
+  <span class="fc">© 2025 Feestplanner — Gemaakt met ♥ in België</span>
 </footer>
-
-<script src="shared.js"></script>
 <script>
-function filterCards(cat, btn) {
-  document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
-  btn.classList.add('active');
-  document.querySelectorAll('.example-card').forEach(card => {
-    if (cat === 'all' || card.dataset.cat?.includes(cat)) {
-      card.style.display = 'block';
-    } else {
-      card.style.display = 'none';
-    }
-  });
-}
+function f(cat,btn){document.querySelectorAll('.fb').forEach(b=>b.classList.remove('active'));btn.classList.add('active');document.querySelectorAll('.card').forEach(c=>{c.style.display=(cat==='all'||c.dataset.cat?.includes(cat))?'block':'none'});}
+function s(){const e=document.getElementById('e').value;if(e&&e.includes('@')){document.getElementById('ok').style.display='block';document.getElementById('e').value=''}}
 </script>
 </body>
 </html>
