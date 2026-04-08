@@ -1,0 +1,430 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Kinderfeestje Tijdlijn Generator — Plan je feest stap voor stap | Feestplanner</title>
+<meta name="description" content="Genereer gratis een persoonlijke tijdlijn voor jouw kinderfeestje. Voer de feestdatum in en krijg een dag-per-dag planning van wat je wanneer moet doen.">
+<meta name="keywords" content="kinderfeestje tijdlijn, feest planning checklist, wanneer wat doen kinderfeest, kinderfeest voorbereiding">
+<link rel="canonical" href="https://feestplanner.nl/tijdlijn-generator">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,900;1,700&family=DM+Sans:wght@300;400;500&family=Dancing+Script:wght@700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --cream:#FDF6F0;--rose:#D4537E;--rose-light:#FBEAF0;--rose-mid:#F4C0D1;
+  --burgundy:#8B3A52;--mint:#B8E0D2;--mint-light:#E8F5F0;--yellow:#FAE8C0;
+  --coral:#E8836A;--dark:#2C1F18;--white:#fff;--text:#3A2920;--text-muted:#9A8070;
+  --border:rgba(212,83,126,0.13);--radius:16px;--radius-lg:24px;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'DM Sans',sans-serif;background:var(--cream);color:var(--text);overflow-x:hidden}
+nav{display:flex;align-items:center;justify-content:space-between;padding:1.25rem 3rem;background:var(--white);border-bottom:.5px solid var(--border);position:sticky;top:0;z-index:100}
+.nav-logo{font-family:'Dancing Script',cursive;font-size:24px;color:var(--rose);text-decoration:none;display:flex;flex-direction:column;line-height:1}
+.nav-logo span{font-family:'DM Sans',sans-serif;font-size:10px;font-weight:500;letter-spacing:.1em;text-transform:uppercase;color:var(--text-muted);margin-top:2px}
+.nav-links{display:flex;gap:2rem;list-style:none}
+.nav-links a{font-size:13px;font-weight:500;color:var(--text-muted);text-decoration:none}
+.nav-links a:hover,.nav-links a.active{color:var(--rose)}
+.nav-cta{background:var(--rose);color:white;border:none;border-radius:99px;padding:9px 22px;font-size:13px;font-weight:500;font-family:'DM Sans',sans-serif;cursor:pointer;text-decoration:none;display:inline-block}
+
+.hero{background:var(--white);padding:4rem 3rem 3rem;border-bottom:.5px solid var(--border)}
+.hero-inner{max-width:960px;margin:0 auto}
+.breadcrumb{font-size:12px;color:var(--text-muted);margin-bottom:1.5rem}
+.breadcrumb a{color:var(--rose);text-decoration:none}
+.sec-eye{font-size:11px;font-weight:500;letter-spacing:.12em;text-transform:uppercase;color:var(--rose);display:block;margin-bottom:.75rem}
+
+.main{max-width:960px;margin:0 auto;padding:3rem;display:grid;grid-template-columns:340px 1fr;gap:2rem;align-items:start}
+
+/* FORM */
+.form-card{background:var(--white);border:1px solid var(--border);border-radius:var(--radius-lg);padding:2rem;position:sticky;top:6rem}
+.form-title{font-family:'Playfair Display',serif;font-size:20px;font-weight:700;color:var(--text);margin-bottom:1.5rem}
+.field{display:flex;flex-direction:column;gap:8px;margin-bottom:1.25rem}
+.field label{font-size:12px;font-weight:500;letter-spacing:.05em;text-transform:uppercase;color:var(--text-muted)}
+.field input,.field select{background:var(--cream);border:1px solid var(--border);border-radius:var(--radius);padding:11px 14px;font-size:15px;font-family:'DM Sans',sans-serif;color:var(--text);width:100%;appearance:none;transition:border-color .2s}
+.field input:focus,.field select:focus{outline:none;border-color:var(--rose)}
+.field select{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%239A8070' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 14px center;background-color:var(--cream);padding-right:36px}
+.gen-btn{width:100%;background:var(--rose);color:white;border:none;border-radius:var(--radius);padding:14px;font-size:15px;font-weight:500;font-family:'DM Sans',sans-serif;cursor:pointer;transition:all .2s;margin-top:.5rem}
+.gen-btn:hover{opacity:.88;transform:translateY(-1px)}
+.countdown-box{background:var(--rose-light);border-radius:var(--radius);padding:1rem 1.25rem;margin-bottom:1.25rem;text-align:center;display:none}
+.countdown-num{font-family:'Playfair Display',serif;font-size:40px;font-weight:900;color:var(--rose);line-height:1}
+.countdown-label{font-size:13px;color:var(--burgundy);margin-top:.25rem}
+
+/* TIMELINE */
+.timeline-wrap{display:flex;flex-direction:column;gap:0}
+.phase{margin-bottom:1.5rem}
+.phase-header{display:flex;align-items:center;gap:1rem;margin-bottom:1rem;padding:.875rem 1.25rem;border-radius:var(--radius-lg);position:relative}
+.phase-icon{font-size:24px;flex-shrink:0}
+.phase-title{font-family:'Playfair Display',serif;font-size:18px;font-weight:700}
+.phase-date{font-size:13px;opacity:.7;margin-top:2px}
+.phase-items{display:flex;flex-direction:column;gap:.625rem;padding-left:1rem}
+.task-item{display:flex;align-items:flex-start;gap:.875rem;padding:1rem 1.25rem;background:var(--white);border:1px solid var(--border);border-radius:var(--radius);cursor:pointer;transition:all .2s;position:relative}
+.task-item:hover{border-color:var(--rose-mid);background:var(--rose-light)}
+.task-item.done{opacity:.55}
+.task-item.done .task-text{text-decoration:line-through}
+.checkbox{width:22px;height:22px;border:2px solid var(--rose-mid);border-radius:6px;flex-shrink:0;display:flex;align-items:center;justify-content:center;transition:all .2s;margin-top:1px}
+.task-item.done .checkbox{background:var(--rose);border-color:var(--rose)}
+.check-icon{color:white;font-size:13px;display:none}
+.task-item.done .check-icon{display:block}
+.task-content{flex:1}
+.task-text{font-size:14px;color:var(--text);line-height:1.5;font-weight:500}
+.task-detail{font-size:12px;color:var(--text-muted);margin-top:3px;line-height:1.5}
+.task-tag{display:inline-block;font-size:10px;font-weight:500;padding:2px 8px;border-radius:99px;margin-top:.375rem}
+.tag-urgent{background:#FEE2E2;color:#991B1B}
+.tag-shop{background:var(--yellow);color:#7a5a10}
+.tag-diy{background:var(--mint-light);color:#1a6b50}
+.tag-call{background:var(--rose-light);color:var(--burgundy)}
+
+/* PROGRESS */
+.progress-section{background:var(--white);border:1px solid var(--border);border-radius:var(--radius-lg);padding:1.5rem;margin-bottom:1.5rem}
+.progress-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:1rem}
+.progress-title{font-family:'Playfair Display',serif;font-size:17px;font-weight:700;color:var(--text)}
+.progress-pct{font-family:'Playfair Display',serif;font-size:24px;font-weight:700;color:var(--rose)}
+.progress-bar{height:10px;background:var(--cream);border-radius:99px;overflow:hidden}
+.progress-fill{height:100%;background:var(--rose);border-radius:99px;transition:width .4s ease}
+.progress-sub{font-size:13px;color:var(--text-muted);margin-top:.625rem}
+
+/* SHARE */
+.share-card{background:var(--dark);border-radius:var(--radius-lg);padding:1.5rem;margin-bottom:1.5rem}
+.share-title{font-size:13px;font-weight:500;color:rgba(255,255,255,.5);margin-bottom:.875rem}
+.share-btns{display:flex;gap:.625rem;flex-wrap:wrap}
+.share-btn{color:white;border-radius:99px;padding:8px 16px;font-size:13px;font-weight:500;border:none;cursor:pointer;font-family:'DM Sans',sans-serif;text-decoration:none;display:inline-block}
+
+.empty-state{text-align:center;padding:4rem 2rem;background:var(--white);border:1px solid var(--border);border-radius:var(--radius-lg)}
+.empty-icon{font-size:64px;margin-bottom:1rem}
+.empty-title{font-family:'Playfair Display',serif;font-size:24px;font-weight:700;color:var(--text);margin-bottom:.5rem}
+.empty-sub{font-size:14px;color:var(--text-muted)}
+
+.cta-card{background:var(--rose-light);border-radius:var(--radius-lg);padding:2rem;text-align:center;margin-top:1.5rem}
+.cta-card h3{font-family:'Playfair Display',serif;font-size:20px;font-weight:700;color:var(--text);margin-bottom:.5rem}
+.cta-card p{font-size:14px;color:var(--text-muted);margin-bottom:1.25rem}
+.btn-p{background:var(--rose);color:white;border-radius:99px;padding:12px 24px;font-size:14px;font-weight:500;text-decoration:none;display:inline-block}
+
+footer{background:var(--dark);padding:2.5rem 3rem;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:1rem;margin-top:3rem}
+.ft-logo{font-family:'Dancing Script',cursive;font-size:22px;color:var(--rose)}
+.ft-links{display:flex;gap:1.5rem}
+.ft-links a{font-size:13px;color:rgba(255,255,255,.5);text-decoration:none}
+.ft-links a:hover{color:var(--rose)}
+.ft-copy{font-size:12px;color:rgba(255,255,255,.3)}
+
+@media(max-width:900px){
+  nav{padding:1rem 1.5rem}.nav-links{display:none}
+  .main{grid-template-columns:1fr;padding:1.5rem}
+  .form-card{position:static}
+  .hero,footer{padding-left:1.5rem;padding-right:1.5rem}
+}
+</style>
+</head>
+<body>
+
+<nav>
+  <a href="index.html" class="nav-logo">Feestplanner<span>Planning met plezier</span></a>
+  <ul class="nav-links">
+    <li><a href="index.html#form">Plan maken</a></li>
+    <li><a href="voorbeelden.html">Voorbeelden</a></li>
+    <li><a href="budget-calculator.html">Budgetcalculator</a></li>
+    <li><a href="tijdlijn-generator.html" class="active">Tijdlijn</a></li>
+  </ul>
+  <a href="index.html#form" class="nav-cta">Maak een plan</a>
+</nav>
+
+<div class="hero">
+  <div class="hero-inner">
+    <div class="breadcrumb"><a href="index.html">Home</a> › Tijdlijn generator</div>
+    <span class="sec-eye">Gratis tool</span>
+    <h1 style="font-family:'Playfair Display',serif;font-size:clamp(30px,4vw,50px);font-weight:900;line-height:1.05;margin-bottom:1rem">Nooit meer vergeten <em style="color:var(--rose)">wat wanneer.</em></h1>
+    <p style="font-size:16px;color:var(--text-muted);line-height:1.7;max-width:520px">Vul de feestdatum in en krijg een complete, afvinkbare tijdlijn — van 4 weken voor het feest tot de dag zelf.</p>
+  </div>
+</div>
+
+<div class="main">
+
+  <!-- FORM -->
+  <div class="form-card">
+    <div class="form-title">📅 Genereer jouw tijdlijn</div>
+
+    <div class="countdown-box" id="countdown-box">
+      <div class="countdown-num" id="countdown-num">—</div>
+      <div class="countdown-label" id="countdown-label">dagen tot het feest</div>
+    </div>
+
+    <div class="field">
+      <label>Naam van het kind</label>
+      <input type="text" id="naam" placeholder="bijv. Flynn" oninput="updateCountdown()">
+    </div>
+
+    <div class="field">
+      <label>Feestdatum *</label>
+      <input type="date" id="feestdatum" oninput="updateCountdown()">
+    </div>
+
+    <div class="field">
+      <label>Thema</label>
+      <input type="text" id="thema" placeholder="bijv. dinosaurussen, prinsessen...">
+    </div>
+
+    <div class="field">
+      <label>Locatie</label>
+      <select id="locatie">
+        <option value="thuis">Thuis (binnen)</option>
+        <option value="tuin">Tuin</option>
+        <option value="park">Park</option>
+        <option value="zaal">Feestzaal</option>
+      </select>
+    </div>
+
+    <div class="field">
+      <label>Taart</label>
+      <select id="taart">
+        <option value="zelf">Zelf bakken</option>
+        <option value="bakker">Bestellen bij bakker</option>
+        <option value="supermarkt">Supermarkt</option>
+      </select>
+    </div>
+
+    <button class="gen-btn" onclick="generate()">Genereer mijn tijdlijn</button>
+  </div>
+
+  <!-- TIMELINE OUTPUT -->
+  <div id="output">
+    <div class="empty-state">
+      <div class="empty-icon">🗓️</div>
+      <div class="empty-title">Jouw tijdlijn verschijnt hier</div>
+      <div class="empty-sub">Vul de feestdatum in en klik op "Genereer"</div>
+    </div>
+  </div>
+
+</div>
+
+<footer>
+  <span class="ft-logo">Feestplanner</span>
+  <div class="ft-links">
+    <a href="index.html#form">Plan maken</a>
+    <a href="budget-calculator.html">Budgetcalculator</a>
+    <a href="tijdlijn-generator.html">Tijdlijn</a>
+    <a href="blog.html">Blog</a>
+  </div>
+  <span class="ft-copy">© 2025 Feestplanner — Gemaakt met ♥ in België</span>
+</footer>
+
+<script>
+const STORAGE_KEY = 'fp_tijdlijn';
+let tasks = [];
+
+function updateCountdown() {
+  const datum = document.getElementById('feestdatum').value;
+  if (!datum) return;
+  const days = Math.ceil((new Date(datum) - new Date()) / 86400000);
+  const box = document.getElementById('countdown-box');
+  const num = document.getElementById('countdown-num');
+  const lbl = document.getElementById('countdown-label');
+  box.style.display = 'block';
+  if (days < 0) { num.textContent = 'Voorbij!'; lbl.textContent = ''; return; }
+  num.textContent = days;
+  lbl.textContent = days === 1 ? 'dag tot het feest!' : 'dagen tot het feest';
+  num.style.color = days <= 7 ? '#E24B4A' : days <= 14 ? '#BA7517' : 'var(--rose)';
+}
+
+function generate() {
+  const datum = document.getElementById('feestdatum').value;
+  if (!datum) { alert('Vul eerst de feestdatum in!'); return; }
+  const naam    = document.getElementById('naam').value || 'het kind';
+  const thema   = document.getElementById('thema').value || 'het thema';
+  const locatie = document.getElementById('locatie').value;
+  const taart   = document.getElementById('taart').value;
+  const feest   = new Date(datum);
+
+  const d = (offset) => {
+    const dt = new Date(feest);
+    dt.setDate(dt.getDate() + offset);
+    return dt;
+  };
+  const fmt = (dt) => dt.toLocaleDateString('nl-BE', { weekday:'long', day:'numeric', month:'long' });
+
+  const locTasks = {
+    thuis: [],
+    tuin:  [{ text:'Weersvoorspelling checken', detail:'Heb een indoor plan B klaar als backup', tag:'urgent' }],
+    park:  [{ text:'Parklocatie reserveren of bevestigen', detail:'Check of er faciliteiten (toilet, water) aanwezig zijn', tag:'call' }],
+    zaal:  [{ text:'Feestzaal definitief bevestigen en betalen', detail:'Vraag naar opbouwtijd en sleutels', tag:'urgent' }],
+  };
+
+  const taartTasks = {
+    zelf:       [{ text:'Taartrecept uitzoeken en ingrediënten noteren', detail:`Denk aan het thema: ${thema}`, tag:'diy' }],
+    bakker:     [{ text:'Taart bestellen bij bakker', detail:'Minimaal 2 weken op voorhand — geef thema en kleur door', tag:'call' }],
+    supermarkt: [{ text:'Taart noteren op boodschappenlijst', detail:'Dag voor het feest ophalen', tag:'shop' }],
+  };
+
+  tasks = [
+    // 4 WEKEN VOOR
+    { phase:'4 weken voor', date:fmt(d(-28)), icon:'📋', color:'#FBEAF0', textColor:'var(--burgundy)', items:[
+      { text:`Gastenlijst opstellen voor ${naam}'s feestje`, detail:'Houd rekening met de ruimte en je budget', tag:'urgent' },
+      { text:'Datum en locatie bevestigen', detail:locatie === 'zaal' ? 'Feestzaal reserveren — wacht niet te lang!' : 'Informeer familie of de datum vrij is', tag:'urgent' },
+      { text:'Uitnodigingen versturen', detail:'Digitaal via WhatsApp of papieren kaartjes — vermeld datum, uur, locatie en allergiëen-vraag', tag:'call' },
+      ...(locTasks[locatie] || []),
+      ...(taartTasks[taart] || []),
+    ]},
+
+    // 2 WEKEN VOOR
+    { phase:'2 weken voor', date:fmt(d(-14)), icon:'🛒', color:'#FAE8C0', textColor:'#7a5a10', items:[
+      { text:'Decoratie bestellen of kopen', detail:`Thema: ${thema} — ballonnen, tafeldecoratie, servetten en tafellaken`, tag:'shop' },
+      { text:'Activiteiten materialen regelen', detail:'Knutselmateriaal, spelletjes of fossielset — alles klaarleggen', tag:'shop' },
+      { text:'Traktaties plannen', detail:'Kleine zakjes met 2-3 items — Action heeft goedkope opties', tag:'shop' },
+      { text:'Bevestiging sturen aan gasten', detail:'WhatsApp met herinnering: datum, uur en locatie', tag:'call' },
+      { text:'Allergieën navragen', detail:'Vraag ouders of kinderen specifieke allergieën hebben', tag:'call' },
+    ]},
+
+    // 1 WEEK VOOR
+    { phase:'1 week voor', date:fmt(d(-7)), icon:'🎨', color:'#E8F5F0', textColor:'#1a6b50', items:[
+      { text:'Decoratie DIY maken', detail:`Kartonnen ${thema}-silhouetten, slingers of gepersonaliseerde labels`, tag:'diy' },
+      { text:'Boodschappenlijst voor eten maken', detail:'Plan exact hoeveel je nodig hebt per hapje — koop niet te veel', tag:'shop' },
+      { text:'Activiteitenplan uitschrijven', detail:'Maak een schema: ontvangst → activiteit 1 → eten → activiteit 2 → taart → afsluiting', tag:'diy' },
+      { text:'Speurtocht of spelletjes voorbereiden', detail:'Print aanwijzingen, maak paspoortjes of stel vragen op', tag:'diy' },
+      { text:'Muzieklijst samenstellen', detail:`Vrolijke nummers passend bij ${thema} — 2u playlist`, tag:'diy' },
+    ]},
+
+    // 2 DAGEN VOOR
+    { phase:'2 dagen voor', date:fmt(d(-2)), icon:'🏃', color:'var(--rose-light)', textColor:'var(--burgundy)', items:[
+      { text:'Boodschappen doen voor eten', detail:'Koop alles behalve versproducten — die koop je dag ervoor', tag:'shop' },
+      { text:'Huis of tuin opruimen', detail:'Maak ruimte voor de kinderen — verwijder breekbare spullen', tag:'diy' },
+      { text:'Zakjes en traktaties voorbereiden', detail:'Vul de meeneemzakjes voor de kinderen', tag:'diy' },
+    ]},
+
+    // DAG VOOR
+    { phase:'Dag voor het feest', date:fmt(d(-1)), icon:'⭐', color:'#E6F1FB', textColor:'#185FA5', items:[
+      { text:'Verse boodschappen halen', detail:'Groenten, brood, fruit en andere versproducten', tag:'shop' },
+      { text:'Taart bakken of ophalen', detail: taart === 'zelf' ? 'Bak de taart vandaag — morgen decoreren' : taart === 'bakker' ? 'Taart ophalen bij bakker — bevestig ophaaluur' : 'Controleer of de taart klaarstaat', tag: taart === 'bakker' ? 'call' : 'diy' },
+      { text:'Decoratie ophangen', detail:'Ballonnen, slingers en tafeldecoratie klaarzetten', tag:'diy' },
+      { text:'Hapjes voorbereiden', detail:'Wat kan je al voorbereiden? Groentesticks snijden, broodjes smeren', tag:'diy' },
+      { text:'Fotopunt stylen', detail:'Backdrop of decoratiewand klaarmaken voor de foto\'s', tag:'diy' },
+      { text:'Vroeg naar bed', detail:'Jij hebt morgen energie nodig! Laat de kinderen ook op tijd slapen', tag:'urgent' },
+    ]},
+
+    // DAG ZELF
+    { phase:'Dag van het feest 🎉', date:fmt(feest), icon:'🎂', color:'var(--rose)', textColor:'white', items:[
+      { text:'2u voor aanvang: laatste check decoratie', detail:'Loop door alle zones — is alles klaar?', tag:'urgent' },
+      { text:'1u voor aanvang: hapjes klaarzetten', detail:'Schoteltjes vullen, drankjes koud zetten', tag:'diy' },
+      { text:'30 min voor aanvang: zelf klaarmaker', detail:'Jij verdient ook een mooi plekje op de foto!', tag:'diy' },
+      { text:'Ontvangst: vrij spelen of rustige activiteit', detail:'Kinderen komen niet allemaal tegelijk — plan een rustige start', tag:'diy' },
+      { text:'Foto\'s maken!', detail:'Vergeet het niet — je bent zo druk dat de tijd vliegt', tag:'urgent' },
+      { text:'Activiteit 1 starten', detail:'Knutselen, zoeken of spelen — houd het kort (max 20 min)', tag:'diy' },
+      { text:'Eten serveren', detail:'Kinderen zijn hongerig na de activiteit', tag:'diy' },
+      { text:'Taart aansnijden', detail:'Iedereen samenbrengen voor het zingen en uitblazen', tag:'urgent' },
+      { text:'Traktaties uitdelen bij vertrek', detail:'Elk kind krijgt zijn zakje mee', tag:'diy' },
+    ]},
+  ];
+
+  saveTasks();
+  render(naam, datum);
+}
+
+function saveTasks() {
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(tasks));
+}
+
+function loadTasks() {
+  try {
+    const saved = JSON.parse(localStorage.getItem(STORAGE_KEY));
+    if (saved) tasks = saved;
+  } catch(e) {}
+}
+
+function toggleTask(phaseIdx, taskIdx) {
+  tasks[phaseIdx].items[taskIdx].done = !tasks[phaseIdx].items[taskIdx].done;
+  saveTasks();
+  updateProgress();
+  document.getElementById(`task-${phaseIdx}-${taskIdx}`).classList.toggle('done');
+  document.getElementById(`task-${phaseIdx}-${taskIdx}`).querySelector('.check-icon').style.display =
+    tasks[phaseIdx].items[taskIdx].done ? 'block' : 'none';
+}
+
+function updateProgress() {
+  const all = tasks.flatMap(p => p.items);
+  const done = all.filter(t => t.done).length;
+  const pct = all.length ? Math.round((done/all.length)*100) : 0;
+  const el = document.getElementById('progress-fill');
+  const pctEl = document.getElementById('progress-pct');
+  const subEl = document.getElementById('progress-sub');
+  if (el) el.style.width = pct + '%';
+  if (pctEl) pctEl.textContent = pct + '%';
+  if (subEl) subEl.textContent = `${done} van ${all.length} taken afgerond`;
+}
+
+function render(naam, datum) {
+  const tagLabels = { urgent:'⚡ Belangrijk', shop:'🛒 Inkopen', diy:'✂️ Zelf maken', call:'📞 Contacteren' };
+  const tagClasses = { urgent:'tag-urgent', shop:'tag-shop', diy:'tag-diy', call:'tag-call' };
+
+  const phasesHTML = tasks.map((phase, pi) => `
+    <div class="phase">
+      <div class="phase-header" style="background:${phase.color}">
+        <div class="phase-icon">${phase.icon}</div>
+        <div>
+          <div class="phase-title" style="color:${phase.textColor}">${phase.phase}</div>
+          <div class="phase-date" style="color:${phase.textColor}">${phase.date}</div>
+        </div>
+      </div>
+      <div class="phase-items">
+        ${phase.items.map((task, ti) => `
+          <div class="task-item ${task.done?'done':''}" id="task-${pi}-${ti}" onclick="toggleTask(${pi},${ti})">
+            <div class="checkbox">
+              <span class="check-icon" style="display:${task.done?'block':'none'}">✓</span>
+            </div>
+            <div class="task-content">
+              <div class="task-text">${task.text}</div>
+              ${task.detail ? `<div class="task-detail">${task.detail}</div>` : ''}
+              ${task.tag ? `<span class="task-tag ${tagClasses[task.tag]}">${tagLabels[task.tag]}</span>` : ''}
+            </div>
+          </div>`).join('')}
+      </div>
+    </div>`).join('');
+
+  const whatsappText = encodeURIComponent(`🎉 Tijdlijn voor het feestje van ${naam}!\nGegenereerd via feestplanner.netlify.app/tijdlijn-generator`);
+
+  document.getElementById('output').innerHTML = `
+    <div class="progress-section">
+      <div class="progress-header">
+        <div class="progress-title">Voortgang</div>
+        <div class="progress-pct" id="progress-pct">0%</div>
+      </div>
+      <div class="progress-bar"><div class="progress-fill" id="progress-fill" style="width:0%"></div></div>
+      <div class="progress-sub" id="progress-sub">0 van ${tasks.flatMap(p=>p.items).length} taken afgerond</div>
+    </div>
+
+    <div class="share-card">
+      <div class="share-title">Deel met je partner</div>
+      <div class="share-btns">
+        <a href="https://wa.me/?text=${whatsappText}" target="_blank" class="share-btn" style="background:#25D366">📱 WhatsApp</a>
+        <button class="share-btn" style="background:#1A1A1A" onclick="window.print()">🖨️ Printen</button>
+        <button class="share-btn" style="background:var(--rose)" onclick="resetAll()">↺ Opnieuw beginnen</button>
+      </div>
+    </div>
+
+    <div class="timeline-wrap">${phasesHTML}</div>
+
+    <div class="cta-card">
+      <h3>Heb je al een <em style="color:var(--rose)">feestplan?</em></h3>
+      <p>Genereer ook een compleet concept met decoratie, activiteiten en boodschappenlijst.</p>
+      <a href="index.html#form" class="btn-p">Maak mijn gratis feestplan →</a>
+    </div>`;
+
+  updateProgress();
+}
+
+function resetAll() {
+  if (!confirm('Tijdlijn resetten? Alle afvinkjes worden gewist.')) return;
+  tasks = [];
+  localStorage.removeItem(STORAGE_KEY);
+  document.getElementById('output').innerHTML = `
+    <div class="empty-state">
+      <div class="empty-icon">🗓️</div>
+      <div class="empty-title">Jouw tijdlijn verschijnt hier</div>
+      <div class="empty-sub">Vul de feestdatum in en klik op "Genereer"</div>
+    </div>`;
+}
+
+// Init — herstel opgeslagen taken
+loadTasks();
+if (tasks.length) {
+  const naam = document.getElementById('naam').value || 'het kind';
+  render(naam, '');
+}
+</script>
+</body>
+</html>

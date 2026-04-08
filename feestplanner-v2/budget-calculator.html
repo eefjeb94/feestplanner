@@ -1,0 +1,399 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Kinderfeestje Budget Calculator — Bereken jouw feestbudget | Feestplanner</title>
+<meta name="description" content="Bereken gratis hoe je jouw kinderfeestje budget slim verdeelt. Voer budget, aantal kinderen en locatie in en zie direct een realistische verdeling.">
+<meta name="keywords" content="kinderfeestje budget calculator, feestje budget berekenen, hoeveel kost kinderfeestje, budget verdelen kinderfeest">
+<link rel="canonical" href="https://feestplanner.nl/budget-calculator">
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"WebApplication","name":"Kinderfeestje Budget Calculator","description":"Bereken slim hoe je jouw feestbudget verdeelt","applicationCategory":"LifestyleApplication","offers":{"@type":"Offer","price":"0","priceCurrency":"EUR"}}</script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,900;1,700&family=DM+Sans:wght@300;400;500&family=Dancing+Script:wght@700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --cream:#FDF6F0;--rose:#D4537E;--rose-light:#FBEAF0;--rose-mid:#F4C0D1;
+  --burgundy:#8B3A52;--mint:#B8E0D2;--mint-light:#E8F5F0;--yellow:#FAE8C0;
+  --coral:#E8836A;--dark:#2C1F18;--white:#fff;--text:#3A2920;--text-muted:#9A8070;
+  --border:rgba(212,83,126,0.13);--radius:16px;--radius-lg:24px;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'DM Sans',sans-serif;background:var(--cream);color:var(--text);overflow-x:hidden}
+nav{display:flex;align-items:center;justify-content:space-between;padding:1.25rem 3rem;background:var(--white);border-bottom:.5px solid var(--border);position:sticky;top:0;z-index:100}
+.nav-logo{font-family:'Dancing Script',cursive;font-size:24px;color:var(--rose);text-decoration:none;display:flex;flex-direction:column;line-height:1}
+.nav-logo span{font-family:'DM Sans',sans-serif;font-size:10px;font-weight:500;letter-spacing:.1em;text-transform:uppercase;color:var(--text-muted);margin-top:2px}
+.nav-links{display:flex;gap:2rem;list-style:none}
+.nav-links a{font-size:13px;font-weight:500;color:var(--text-muted);text-decoration:none}
+.nav-links a:hover,.nav-links a.active{color:var(--rose)}
+.nav-cta{background:var(--rose);color:white;border:none;border-radius:99px;padding:9px 22px;font-size:13px;font-weight:500;font-family:'DM Sans',sans-serif;cursor:pointer;text-decoration:none;display:inline-block}
+
+/* HERO */
+.hero{background:var(--white);padding:4rem 3rem 3rem;border-bottom:.5px solid var(--border)}
+.hero-inner{max-width:960px;margin:0 auto}
+.breadcrumb{font-size:12px;color:var(--text-muted);margin-bottom:1.5rem}
+.breadcrumb a{color:var(--rose);text-decoration:none}
+.sec-eye{font-size:11px;font-weight:500;letter-spacing:.12em;text-transform:uppercase;color:var(--rose);display:block;margin-bottom:.75rem}
+.hero h1{font-family:'Playfair Display',serif;font-size:clamp(32px,4vw,52px);font-weight:900;line-height:1.05;margin-bottom:1rem}
+.hero h1 em{font-style:italic;color:var(--rose)}
+.hero p{font-size:16px;color:var(--text-muted);line-height:1.7;max-width:520px}
+
+/* MAIN LAYOUT */
+.main{max-width:960px;margin:0 auto;padding:3rem;display:grid;grid-template-columns:1fr 1fr;gap:2rem;align-items:start}
+
+/* CALCULATOR */
+.calc-card{background:var(--white);border:1px solid var(--border);border-radius:var(--radius-lg);padding:2rem;position:sticky;top:6rem}
+.calc-title{font-family:'Playfair Display',serif;font-size:20px;font-weight:700;color:var(--text);margin-bottom:1.5rem}
+.field{display:flex;flex-direction:column;gap:8px;margin-bottom:1.25rem}
+.field label{font-size:12px;font-weight:500;letter-spacing:.05em;text-transform:uppercase;color:var(--text-muted)}
+.slider-wrap{display:flex;align-items:center;gap:1rem}
+.slider-wrap input[type=range]{flex:1;-webkit-appearance:none;height:4px;background:var(--rose-mid);border-radius:99px;outline:none}
+.slider-wrap input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:20px;height:20px;border-radius:50%;background:var(--rose);cursor:pointer;box-shadow:0 2px 8px rgba(212,83,126,.3)}
+.slider-val{font-family:'Playfair Display',serif;font-size:22px;font-weight:700;color:var(--rose);min-width:70px;text-align:right}
+.field select{background:var(--cream);border:1px solid var(--border);border-radius:var(--radius);padding:11px 14px;font-size:15px;font-family:'DM Sans',sans-serif;color:var(--text);appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%239A8070' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 14px center;padding-right:36px}
+
+/* RESULTS */
+.results-card{display:flex;flex-direction:column;gap:1.25rem}
+.total-card{background:var(--rose);border-radius:var(--radius-lg);padding:1.75rem 2rem;color:white}
+.total-label{font-size:12px;font-weight:500;letter-spacing:.1em;text-transform:uppercase;opacity:.8;margin-bottom:.5rem}
+.total-amount{font-family:'Playfair Display',serif;font-size:48px;font-weight:900;line-height:1}
+.total-sub{font-size:13px;opacity:.7;margin-top:.5rem}
+.breakdown-card{background:var(--white);border:1px solid var(--border);border-radius:var(--radius-lg);padding:1.75rem 2rem}
+.breakdown-title{font-family:'Playfair Display',serif;font-size:17px;font-weight:700;color:var(--text);margin-bottom:1.25rem}
+.cat-item{margin-bottom:1.25rem}
+.cat-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:.5rem}
+.cat-name{font-size:14px;font-weight:500;color:var(--text);display:flex;align-items:center;gap:8px}
+.cat-icon{font-size:18px}
+.cat-amount{font-family:'Playfair Display',serif;font-size:18px;font-weight:700;color:var(--text)}
+.cat-pct{font-size:11px;color:var(--text-muted);margin-left:4px}
+.progress-bar{height:8px;background:var(--cream);border-radius:99px;overflow:hidden}
+.progress-fill{height:100%;border-radius:99px;transition:width .5s ease}
+.cat-tips{font-size:12px;color:var(--text-muted);margin-top:.375rem;line-height:1.5}
+.pp-card{background:var(--mint-light);border-radius:var(--radius-lg);padding:1.5rem 2rem}
+.pp-title{font-size:13px;font-weight:500;color:#1a6b50;margin-bottom:.875rem;display:flex;align-items:center;gap:6px}
+.pp-row{display:flex;justify-content:space-between;align-items:center;padding:.5rem 0;border-bottom:.5px solid rgba(184,224,210,.5);font-size:14px;color:var(--text)}
+.pp-row:last-child{border-bottom:none}
+.pp-val{font-weight:500;color:#1a6b50}
+.warning-card{background:var(--yellow);border-radius:var(--radius-lg);padding:1.25rem 1.5rem;font-size:13px;color:#7a5a10;line-height:1.7;display:none}
+.tips-card{background:var(--cream);border-radius:var(--radius-lg);padding:1.5rem 2rem}
+.tips-title{font-family:'Playfair Display',serif;font-size:17px;font-weight:700;color:var(--text);margin-bottom:1rem}
+.tip-item{display:flex;gap:.75rem;margin-bottom:.875rem;font-size:14px;color:var(--text);line-height:1.6}
+.tip-icon{flex-shrink:0;font-size:18px}
+.shop-card{background:var(--dark);border-radius:var(--radius-lg);padding:1.5rem 2rem}
+.shop-title{font-size:13px;font-weight:500;color:rgba(255,255,255,.5);margin-bottom:1rem}
+.shop-btns{display:flex;flex-wrap:wrap;gap:.625rem}
+.shop-btn{color:white;border-radius:99px;padding:8px 16px;font-size:13px;font-weight:500;text-decoration:none;display:inline-block}
+.cta-card{background:var(--rose-light);border-radius:var(--radius-lg);padding:2rem;text-align:center}
+.cta-card h3{font-family:'Playfair Display',serif;font-size:22px;font-weight:700;color:var(--text);margin-bottom:.5rem}
+.cta-card p{font-size:14px;color:var(--text-muted);margin-bottom:1.25rem}
+.btn-p{background:var(--rose);color:white;border-radius:99px;padding:12px 24px;font-size:14px;font-weight:500;text-decoration:none;display:inline-block;transition:opacity .2s}
+.btn-p:hover{opacity:.88}
+
+/* INFO SECTION */
+.info-section{background:var(--white);padding:4rem 3rem;border-top:.5px solid var(--border)}
+.info-inner{max-width:960px;margin:0 auto}
+.info-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1.5rem;margin-top:2rem}
+.info-card{background:var(--cream);border-radius:var(--radius-lg);padding:1.5rem}
+.info-icon{font-size:28px;margin-bottom:.75rem}
+.info-title{font-family:'Playfair Display',serif;font-size:17px;font-weight:700;color:var(--text);margin-bottom:.5rem}
+.info-text{font-size:14px;color:var(--text-muted);line-height:1.7}
+
+footer{background:var(--dark);padding:2.5rem 3rem;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:1rem}
+.ft-logo{font-family:'Dancing Script',cursive;font-size:22px;color:var(--rose)}
+.ft-links{display:flex;gap:1.5rem}
+.ft-links a{font-size:13px;color:rgba(255,255,255,.5);text-decoration:none}
+.ft-links a:hover{color:var(--rose)}
+.ft-copy{font-size:12px;color:rgba(255,255,255,.3)}
+
+@media(max-width:900px){
+  nav{padding:1rem 1.5rem}.nav-links{display:none}
+  .main{grid-template-columns:1fr;padding:1.5rem}
+  .hero,.info-section,footer{padding-left:1.5rem;padding-right:1.5rem}
+  .calc-card{position:static}
+  .info-grid{grid-template-columns:1fr}
+}
+</style>
+</head>
+<body>
+
+<nav>
+  <a href="index.html" class="nav-logo">Feestplanner<span>Planning met plezier</span></a>
+  <ul class="nav-links">
+    <li><a href="index.html#form">Plan maken</a></li>
+    <li><a href="voorbeelden.html">Voorbeelden</a></li>
+    <li><a href="blog.html">Blog</a></li>
+    <li><a href="budget-calculator.html" class="active">Budgetcalculator</a></li>
+  </ul>
+  <a href="index.html#form" class="nav-cta">Maak een plan</a>
+</nav>
+
+<div class="hero">
+  <div class="hero-inner">
+    <div class="breadcrumb"><a href="index.html">Home</a> › Budgetcalculator</div>
+    <span class="sec-eye">Gratis tool</span>
+    <h1>Jouw feestbudget<br><em>slim verdelen.</em></h1>
+    <p>Voer je budget, aantal kinderen en locatie in — en zie direct hoe je het best verdeelt over decoratie, eten, activiteiten en meer.</p>
+  </div>
+</div>
+
+<div class="main">
+
+  <!-- CALCULATOR INPUT -->
+  <div class="calc-card">
+    <div class="calc-title">🎈 Bereken jouw budget</div>
+
+    <div class="field">
+      <label>Totaal budget</label>
+      <div class="slider-wrap">
+        <input type="range" id="budget" min="50" max="500" step="10" value="150" oninput="update()">
+        <div class="slider-val" id="budget-val">€150</div>
+      </div>
+    </div>
+
+    <div class="field">
+      <label>Aantal kinderen</label>
+      <div class="slider-wrap">
+        <input type="range" id="kids" min="3" max="25" step="1" value="10" oninput="update()">
+        <div class="slider-val" id="kids-val">10</div>
+      </div>
+    </div>
+
+    <div class="field">
+      <label>Locatie</label>
+      <select id="locatie" onchange="update()">
+        <option value="thuis">Thuis (binnen)</option>
+        <option value="tuin" selected>Tuin</option>
+        <option value="park">Park (gratis)</option>
+        <option value="zaal">Feestzaal (huur)</option>
+      </select>
+    </div>
+
+    <div class="field">
+      <label>Leeftijd kind</label>
+      <select id="leeftijd" onchange="update()">
+        <option value="baby">1–2 jaar (baby/dreumes)</option>
+        <option value="peuter">3–4 jaar (peuter)</option>
+        <option value="kleuter" selected>5–6 jaar (kleuter)</option>
+        <option value="kind">7–10 jaar (kind)</option>
+      </select>
+    </div>
+
+    <div class="field">
+      <label>Stijl voorkeur</label>
+      <select id="stijl" onchange="update()">
+        <option value="simpel">Simpel & doable</option>
+        <option value="medium" selected>Uitgewerkt & leuk</option>
+        <option value="luxe">Pinterest-perfect</option>
+      </select>
+    </div>
+  </div>
+
+  <!-- RESULTS -->
+  <div class="results-card">
+
+    <div class="total-card">
+      <div class="total-label">Jouw feestbudget</div>
+      <div class="total-amount" id="total-amount">€150</div>
+      <div class="total-sub" id="total-sub">voor 10 kinderen · €15 per kind</div>
+    </div>
+
+    <div id="warning-card" class="warning-card">
+      ⚠️ <strong>Let op:</strong> <span id="warning-text"></span>
+    </div>
+
+    <div class="breakdown-card">
+      <div class="breakdown-title">Aanbevolen verdeling</div>
+      <div id="breakdown"></div>
+    </div>
+
+    <div class="pp-card">
+      <div class="pp-title">💡 Per kind berekening</div>
+      <div id="pp-rows"></div>
+    </div>
+
+    <div class="tips-card">
+      <div class="tips-title">Slimme bespaartips</div>
+      <div id="tips"></div>
+    </div>
+
+    <div class="shop-card">
+      <div class="shop-title">Bestel decoratie binnen jouw budget</div>
+      <div class="shop-btns">
+        <a href="https://www.action.com/nl-be/zoeken/?q=kinderfeest" target="_blank" rel="noopener" class="shop-btn" style="background:#E63329">Action</a>
+        <a href="https://www.bol.com/nl/nl/s/?searchtext=kinderfeest+decoratie" target="_blank" rel="noopener sponsored" class="shop-btn" style="background:#0071CE">bol.com</a>
+        <a href="https://www.hema.nl/zoeken?q=kinderfeest" target="_blank" rel="noopener" class="shop-btn" style="background:#1A1A1A">HEMA</a>
+      </div>
+      <p style="font-size:11px;color:rgba(255,255,255,.3);margin-top:.75rem">Sommige links zijn affiliate links</p>
+    </div>
+
+    <div class="cta-card">
+      <h3>Wil je ook een <em style="color:var(--rose)">compleet plan?</em></h3>
+      <p>Gebruik onze AI-planner voor een volledig feestconcept met setup, activiteiten en boodschappenlijst.</p>
+      <a href="index.html#form" class="btn-p">Maak mijn gratis feestplan →</a>
+    </div>
+
+  </div>
+</div>
+
+<!-- INFO SECTION -->
+<section class="info-section">
+  <div class="info-inner">
+    <span class="sec-eye">Handige weetjes</span>
+    <h2 style="font-family:'Playfair Display',serif;font-size:32px;font-weight:700;color:var(--text)">Wat kost een kinderfeestje <em style="color:var(--rose)">echt?</em></h2>
+    <div class="info-grid">
+      <div class="info-card">
+        <div class="info-icon">📊</div>
+        <div class="info-title">Gemiddeld in België</div>
+        <div class="info-text">Belgische ouders geven gemiddeld €180–€220 uit aan een kinderfeestje voor 10–12 kinderen. De helft geeft aan dat ze te veel uitgeven aan decoratie en te weinig aan activiteiten.</div>
+      </div>
+      <div class="info-card">
+        <div class="info-icon">💡</div>
+        <div class="info-title">Grootste valkuil</div>
+        <div class="info-text">Impulsaankopen in de feestwinkel. Ga met een lijst en een vast bedrag cash. Kinderen onthouden activiteiten, niet de decoraties. Investeer daar dus meer in.</div>
+      </div>
+      <div class="info-card">
+        <div class="info-icon">🏆</div>
+        <div class="info-title">Beste prijs-kwaliteit</div>
+        <div class="info-text">Action heeft het beste feestassortiment per euro. HEMA scoort op kwaliteit. bol.com voor thema-specifieke items. Vermijd gespecialiseerde feestartikelenwinkels — zelfde producten, 3x de prijs.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <span class="ft-logo">Feestplanner</span>
+  <div class="ft-links">
+    <a href="index.html#form">Plan maken</a>
+    <a href="voorbeelden.html">Voorbeelden</a>
+    <a href="blog.html">Blog</a>
+    <a href="budget-calculator.html">Budgetcalculator</a>
+  </div>
+  <span class="ft-copy">© 2025 Feestplanner — Gemaakt met ♥ in België</span>
+</footer>
+
+<script>
+const CATS = [
+  { key:'deco',   label:'Decoratie',   icon:'🎈', colors:['#D4537E','#F4C0D1'], base:.22 },
+  { key:'eten',   label:'Eten & drinken', icon:'🍕', colors:['#E8836A','#F5C4B3'], base:.28 },
+  { key:'taart',  label:'Taart',        icon:'🎂', colors:['#BA7517','#FAC775'], base:.14 },
+  { key:'act',    label:'Activiteiten', icon:'🎮', colors:['#1D9E75','#9FE1CB'], base:.16 },
+  { key:'trak',   label:'Traktaties',   icon:'🎁', colors:['#7F77DD','#CECBF6'], base:.08 },
+  { key:'misc',   label:'Onvoorzien',   icon:'🔧', colors:['#888780','#D3D1C7'], base:.06 },
+];
+
+const LOCATION_EXTRA = { thuis:0, tuin:0, park:0, zaal:30 };
+const STYLE_MULT = { simpel:.85, medium:1, luxe:1.2 };
+
+const TIPS_DB = {
+  simpel:[
+    { icon:'💡', text:'Kraftpapier als tafellaken (€3 bij IKEA) is mooier dan plastiek en goedkoper.' },
+    { icon:'🎈', text:'Koop ballonnen bij Action — zak van 50 voor €2,49.' },
+    { icon:'🍕', text:'Mini-sandwiches en groentesticks zijn goedkoop, makkelijk en kinderen eten het.' },
+  ],
+  medium:[
+    { icon:'🎨', text:'Kies één accentkleur en houd je er strikt aan — coherentie maakt meer indruk dan budget.' },
+    { icon:'🛒', text:'Maak een lijst vóór je naar de winkel gaat en neem exact cash mee voor die categorie.' },
+    { icon:'🎮', text:'Investeer meer in één goede activiteit dan in veel kleine versieringen.' },
+  ],
+  luxe:[
+    { icon:'📌', text:'Zoek op Pinterest voor jouw thema en maak een moodboard vóór je iets koopt.' },
+    { icon:'🌿', text:'Echte planten en bloemen zien er duurder uit dan nepplanten en kosten evenveel.' },
+    { icon:'📸', text:'Een mooie backdrop kost €5 aan ballonnen maar levert 10 jaar fotoherinneringen op.' },
+  ],
+};
+
+function update() {
+  const budget  = parseInt(document.getElementById('budget').value);
+  const kids    = parseInt(document.getElementById('kids').value);
+  const locatie = document.getElementById('locatie').value;
+  const leeftijd= document.getElementById('leeftijd').value;
+  const stijl   = document.getElementById('stijl').value;
+
+  document.getElementById('budget-val').textContent = '€' + budget;
+  document.getElementById('kids-val').textContent   = kids;
+
+  const locExtra = LOCATION_EXTRA[locatie];
+  const effectief = Math.max(0, budget - locExtra);
+  const mult = STYLE_MULT[stijl];
+
+  // Leeftijd aanpassingen
+  let catMults = { deco:1, eten:1, taart:1, act:1, trak:1, misc:1 };
+  if (leeftijd === 'baby')  { catMults.act = .5;  catMults.deco = 1.2; catMults.eten = .8; }
+  if (leeftijd === 'peuter'){ catMults.act = .8;  catMults.trak = 1.1; }
+  if (leeftijd === 'kind')  { catMults.act = 1.3; catMults.deco = .9; }
+
+  // Bereken bedragen
+  let raw = {};
+  CATS.forEach(c => { raw[c.key] = c.base * catMults[c.key]; });
+  const rawTotal = Object.values(raw).reduce((a,b) => a+b, 0);
+  const amounts = {};
+  CATS.forEach(c => { amounts[c.key] = Math.round((raw[c.key]/rawTotal) * effectief); });
+
+  // Totaal
+  document.getElementById('total-amount').textContent = '€' + budget;
+  document.getElementById('total-sub').textContent =
+    `voor ${kids} kinderen · €${Math.round(budget/kids)} per kind` +
+    (locExtra > 0 ? ` · incl. €${locExtra} zaalhuur` : '');
+
+  // Warning
+  const ppBudget = budget / kids;
+  const wcard = document.getElementById('warning-card');
+  const wtxt  = document.getElementById('warning-text');
+  if (ppBudget < 8) {
+    wcard.style.display = 'block';
+    wtxt.textContent = `€${Math.round(ppBudget)} per kind is erg krap. Overweeg het aantal kinderen te beperken of je budget te verhogen voor een fijner feestje.`;
+  } else if (locExtra > 0 && locExtra/budget > .25) {
+    wcard.style.display = 'block';
+    wtxt.textContent = `De zaalhuur (€${locExtra}) neemt meer dan 25% van je budget in. Overweeg thuis of in het park te feesten.`;
+  } else {
+    wcard.style.display = 'none';
+  }
+
+  // Breakdown
+  const bd = document.getElementById('breakdown');
+  bd.innerHTML = CATS.map(c => {
+    const amt = amounts[c.key];
+    const pct = Math.round((amt/effectief)*100);
+    return `
+      <div class="cat-item">
+        <div class="cat-header">
+          <div class="cat-name"><span class="cat-icon">${c.icon}</span>${c.label}</div>
+          <div><span class="cat-amount">€${amt}</span><span class="cat-pct">${pct}%</span></div>
+        </div>
+        <div class="progress-bar"><div class="progress-fill" style="width:${pct}%;background:${c.colors[0]}"></div></div>
+        <div class="cat-tips">${getTip(c.key, amt, kids, stijl)}</div>
+      </div>`;
+  }).join('');
+
+  // Per kind
+  const pp = document.getElementById('pp-rows');
+  pp.innerHTML = [
+    ['Decoratie per kind', '€' + Math.round(amounts.deco/kids)],
+    ['Eten & taart per kind', '€' + Math.round((amounts.eten+amounts.taart)/kids)],
+    ['Activiteit per kind', '€' + Math.round(amounts.act/kids)],
+    ['Traktatie per kind', '€' + Math.round(amounts.trak/kids)],
+  ].map(([l,v]) => `<div class="pp-row"><span>${l}</span><span class="pp-val">${v}</span></div>`).join('');
+
+  // Tips
+  const tipsEl = document.getElementById('tips');
+  const tipSet = TIPS_DB[stijl] || TIPS_DB.medium;
+  tipsEl.innerHTML = tipSet.map(t =>
+    `<div class="tip-item"><span class="tip-icon">${t.icon}</span><span>${t.text}</span></div>`
+  ).join('');
+}
+
+function getTip(key, amt, kids, stijl) {
+  const tips = {
+    deco: amt < 20 ? 'Tip: kraftpapier, nepbladeren en 1 ballonboog zijn genoeg voor een mooi resultaat.' : amt < 40 ? 'Budget voor ballonnen, tafeldecoratie en één fotopunt.' : 'Ruim budget — investeer in een professioneel ogende ballonboog of backdrop.',
+    eten: `Voor ${kids} kinderen: plan ca. 3–4 hapjes per kind. Mini-sandwiches, groentesticks en chips.`,
+    taart: amt < 15 ? 'Zelfgemaakte cake met eenvoudige frosting en één decoratief element.' : amt < 25 ? 'Zelf bakken of eenvoudige bestelling bij lokale bakker.' : 'Ruim genoeg voor een gepersonaliseerde taart bij de bakker.',
+    act: amt < 15 ? 'Gratis activiteit: speurtocht op papier of fossiel opgraving (zandbak + €4 fossielset).' : amt < 30 ? 'Knutselactiviteit zoals eieren schilderen of maskers maken.' : 'Budget voor materialen + een buitenactiviteit of springkasteel (halve dag).',
+    trak: `Ca. €${Math.round(amt/kids)} per kind — zakje met 2-3 kleine cadeautjes van Action.`,
+    misc: 'Bewaar dit altijd als buffer. Feestjes lopen altijd net iets over budget.',
+  };
+  return tips[key] || '';
+}
+
+update();
+</script>
+</body>
+</html>
