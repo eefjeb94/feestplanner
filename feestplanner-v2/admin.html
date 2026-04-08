@@ -1,0 +1,1061 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Feestplanner — Beheerpaneel</title>
+<meta name="robots" content="noindex, nofollow">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;1,700&family=DM+Sans:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root{
+  --rose:#D4537E; --rose-light:#FBEAF0; --rose-mid:#F4C0D1;
+  --mint:#B8E0D2; --mint-light:#E8F5F0; --yellow:#FAE8C0;
+  --dark:#2C1F18; --cream:#FDF6F0; --white:#fff;
+  --text:#3A2920; --muted:#9A8070; --border:rgba(212,83,126,0.13);
+  --radius:12px; --radius-lg:20px;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'DM Sans',sans-serif;background:#1a1a2e;color:var(--text);min-height:100vh;display:flex}
+
+/* SIDEBAR */
+.sidebar{width:240px;background:#16213e;padding:2rem 1.25rem;display:flex;flex-direction:column;gap:.25rem;flex-shrink:0;min-height:100vh}
+.sidebar-logo{font-family:'Playfair Display',serif;font-size:20px;color:var(--rose);margin-bottom:2rem;padding-bottom:1.5rem;border-bottom:1px solid rgba(255,255,255,.07)}
+.sidebar-logo span{display:block;font-family:'DM Sans',sans-serif;font-size:10px;font-weight:500;letter-spacing:.1em;text-transform:uppercase;color:rgba(255,255,255,.3);margin-top:3px}
+.nav-item{display:flex;align-items:center;gap:10px;padding:.7rem 1rem;border-radius:10px;color:rgba(255,255,255,.5);font-size:14px;font-weight:500;cursor:pointer;transition:all .2s;border:none;background:none;width:100%;text-align:left}
+.nav-item:hover{background:rgba(255,255,255,.06);color:rgba(255,255,255,.8)}
+.nav-item.active{background:rgba(212,83,126,.15);color:var(--rose)}
+.nav-icon{font-size:16px;width:20px;text-align:center}
+.sidebar-section{font-size:10px;font-weight:500;letter-spacing:.1em;text-transform:uppercase;color:rgba(255,255,255,.2);padding:.5rem 1rem;margin-top:1rem}
+.sidebar-bottom{margin-top:auto;padding-top:1rem;border-top:1px solid rgba(255,255,255,.07)}
+.live-btn{display:block;text-align:center;background:var(--rose);color:white;border-radius:10px;padding:.7rem;font-size:13px;font-weight:500;text-decoration:none;transition:opacity .2s}
+.live-btn:hover{opacity:.85}
+
+/* MAIN */
+.main{flex:1;padding:2rem;overflow-y:auto;background:#0f0f23}
+
+/* PANELS */
+.panel{display:none}
+.panel.active{display:block}
+
+/* HEADER */
+.page-header{margin-bottom:2rem}
+.page-title{font-family:'Playfair Display',serif;font-size:28px;font-weight:700;color:white;margin-bottom:.25rem}
+.page-sub{font-size:14px;color:rgba(255,255,255,.4)}
+
+/* CARDS */
+.card{background:#16213e;border:1px solid rgba(255,255,255,.07);border-radius:var(--radius-lg);padding:1.5rem;margin-bottom:1.25rem}
+.card-title{font-size:13px;font-weight:500;letter-spacing:.06em;text-transform:uppercase;color:rgba(255,255,255,.4);margin-bottom:1.25rem;display:flex;align-items:center;gap:8px}
+.card-title span{font-size:16px}
+
+/* STATS */
+.stats-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:1rem;margin-bottom:1.5rem}
+.stat-card{background:#16213e;border:1px solid rgba(255,255,255,.07);border-radius:var(--radius-lg);padding:1.25rem}
+.stat-label{font-size:11px;font-weight:500;letter-spacing:.08em;text-transform:uppercase;color:rgba(255,255,255,.35);margin-bottom:.5rem}
+.stat-value{font-family:'Playfair Display',serif;font-size:32px;font-weight:700;color:white}
+.stat-sub{font-size:12px;color:rgba(255,255,255,.3);margin-top:.25rem}
+
+/* FORMS */
+.field{display:flex;flex-direction:column;gap:7px;margin-bottom:1rem}
+.field label{font-size:12px;font-weight:500;letter-spacing:.04em;text-transform:uppercase;color:rgba(255,255,255,.4)}
+.field input,.field select,.field textarea{background:#0f0f23;border:1px solid rgba(255,255,255,.1);border-radius:var(--radius);padding:11px 14px;font-size:14px;font-family:'DM Sans',sans-serif;color:white;transition:border-color .2s}
+.field input:focus,.field select:focus,.field textarea:focus{outline:none;border-color:var(--rose)}
+.field input::placeholder,.field textarea::placeholder{color:rgba(255,255,255,.2)}
+.field textarea{min-height:120px;resize:vertical;line-height:1.6}
+.field select{appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='rgba(255,255,255,0.4)' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 12px center;padding-right:32px}
+.field select option{background:#16213e;color:white}
+.form-grid{display:grid;grid-template-columns:1fr 1fr;gap:1rem}
+.form-row{display:flex;gap:.75rem;align-items:flex-end}
+
+/* BUTTONS */
+.btn{border:none;border-radius:var(--radius);padding:10px 20px;font-size:14px;font-weight:500;font-family:'DM Sans',sans-serif;cursor:pointer;transition:all .2s;display:inline-flex;align-items:center;gap:8px}
+.btn-rose{background:var(--rose);color:white}
+.btn-rose:hover{opacity:.88}
+.btn-dark{background:rgba(255,255,255,.08);color:rgba(255,255,255,.7)}
+.btn-dark:hover{background:rgba(255,255,255,.14)}
+.btn-danger{background:rgba(220,38,38,.15);color:#f87171}
+.btn-danger:hover{background:rgba(220,38,38,.25)}
+.btn-sm{padding:7px 14px;font-size:13px}
+.btn-full{width:100%;justify-content:center}
+
+/* TABLES */
+.table-wrap{overflow-x:auto}
+table{width:100%;border-collapse:collapse}
+th{font-size:11px;font-weight:500;letter-spacing:.08em;text-transform:uppercase;color:rgba(255,255,255,.35);padding:.75rem 1rem;text-align:left;border-bottom:1px solid rgba(255,255,255,.07)}
+td{padding:.875rem 1rem;font-size:14px;color:rgba(255,255,255,.7);border-bottom:1px solid rgba(255,255,255,.05)}
+tr:last-child td{border-bottom:none}
+tr:hover td{background:rgba(255,255,255,.02)}
+
+/* BADGES */
+.badge{display:inline-block;font-size:11px;font-weight:500;padding:3px 10px;border-radius:99px}
+.badge-rose{background:rgba(212,83,126,.2);color:#f4a0bf}
+.badge-mint{background:rgba(184,224,210,.15);color:#7ecbb0}
+.badge-yellow{background:rgba(250,232,192,.15);color:#e8c878}
+.badge-gray{background:rgba(255,255,255,.08);color:rgba(255,255,255,.5)}
+
+/* RICH TEXT EDITOR */
+.editor-toolbar{display:flex;gap:.5rem;flex-wrap:wrap;padding:.75rem;background:#0f0f23;border:1px solid rgba(255,255,255,.1);border-bottom:none;border-radius:var(--radius) var(--radius) 0 0}
+.editor-btn{background:rgba(255,255,255,.07);border:none;border-radius:6px;padding:5px 10px;font-size:13px;color:rgba(255,255,255,.6);cursor:pointer;font-family:'DM Sans',sans-serif;transition:all .2s}
+.editor-btn:hover{background:rgba(255,255,255,.13);color:white}
+.editor-content{background:#0f0f23;border:1px solid rgba(255,255,255,.1);border-radius:0 0 var(--radius) var(--radius);min-height:200px;padding:1rem;color:white;font-size:14px;line-height:1.7;outline:none}
+.editor-content:focus{border-color:var(--rose)}
+
+/* AFFILIATE LIST */
+.affiliate-item{background:#0f0f23;border:1px solid rgba(255,255,255,.07);border-radius:var(--radius);padding:1rem 1.25rem;margin-bottom:.75rem;display:flex;align-items:center;gap:1rem}
+.affiliate-item .store-badge{width:40px;height:40px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0}
+.affiliate-info{flex:1;min-width:0}
+.affiliate-name{font-size:14px;font-weight:500;color:white;margin-bottom:2px}
+.affiliate-url{font-size:12px;color:rgba(255,255,255,.3);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.affiliate-pct{font-size:13px;font-weight:500;color:#7ecbb0;flex-shrink:0}
+.affiliate-actions{display:flex;gap:.5rem;flex-shrink:0}
+
+/* TOGGLE */
+.toggle-wrap{display:flex;align-items:center;gap:.75rem}
+.toggle{width:42px;height:24px;background:rgba(255,255,255,.1);border-radius:99px;position:relative;cursor:pointer;transition:background .2s;border:none;flex-shrink:0}
+.toggle.on{background:var(--rose)}
+.toggle::after{content:'';width:18px;height:18px;background:white;border-radius:50%;position:absolute;top:3px;left:3px;transition:transform .2s}
+.toggle.on::after{transform:translateX(18px)}
+.toggle-label{font-size:14px;color:rgba(255,255,255,.6)}
+
+/* TOAST */
+.toast{position:fixed;bottom:2rem;right:2rem;background:var(--dark);color:white;padding:12px 20px;border-radius:12px;font-size:14px;z-index:9999;display:flex;align-items:center;gap:10px;animation:slideUp .3s ease}
+@keyframes slideUp{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
+.toast.success{border-left:3px solid #4ade80}
+.toast.error{border-left:3px solid #f87171}
+
+/* COLOR PREVIEW */
+.color-dot{width:10px;height:10px;border-radius:50%;display:inline-block;margin-right:6px}
+
+@media(max-width:768px){
+  .sidebar{display:none}
+  .stats-grid{grid-template-columns:1fr 1fr}
+  .form-grid{grid-template-columns:1fr}
+}
+</style>
+</head>
+<body>
+
+<!-- SIDEBAR -->
+<aside class="sidebar">
+  <div class="sidebar-logo">
+    Feestplanner
+    <span>Beheerpaneel</span>
+  </div>
+
+  <div class="sidebar-section">Inhoud</div>
+  <button class="nav-item active" onclick="showPanel('dashboard')">
+    <span class="nav-icon">📊</span> Dashboard
+  </button>
+  <button class="nav-item" onclick="showPanel('blog')">
+    <span class="nav-icon">✍️</span> Blogartikelen
+  </button>
+  <button class="nav-item" onclick="showPanel('voorbeelden')">
+    <span class="nav-icon">🎪</span> Voorbeeldfeestjes
+  </button>
+  <button class="nav-item" onclick="showPanel('teksten')">
+    <span class="nav-icon">📝</span> Paginateksten
+  </button>
+
+  <div class="sidebar-section">Verdienmodel</div>
+  <button class="nav-item" onclick="showPanel('affiliates')">
+    <span class="nav-icon">🔗</span> Affiliate links
+  </button>
+  <button class="nav-item" onclick="showPanel('sponsor')">
+    <span class="nav-icon">⭐</span> Sponsor slot
+  </button>
+
+  <div class="sidebar-section">Instellingen</div>
+  <button class="nav-item" onclick="showPanel('instellingen')">
+    <span class="nav-icon">⚙️</span> Instellingen
+  </button>
+
+  <div class="sidebar-bottom">
+    <a href="/" target="_blank" class="live-btn">🌐 Bekijk live website</a>
+  </div>
+</aside>
+
+<!-- MAIN CONTENT -->
+<main class="main">
+
+  <!-- DASHBOARD -->
+  <div class="panel active" id="panel-dashboard">
+    <div class="page-header">
+      <div class="page-title">Goedemorgen! 👋</div>
+      <div class="page-sub">Hier is een overzicht van je Feestplanner.</div>
+    </div>
+
+    <div class="stats-grid">
+      <div class="stat-card">
+        <div class="stat-label">Blogartikelen</div>
+        <div class="stat-value" id="stat-blogs">0</div>
+        <div class="stat-sub">gepubliceerd</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">Voorbeeldfeestjes</div>
+        <div class="stat-value" id="stat-voorbeelden">0</div>
+        <div class="stat-sub">online</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">Affiliate links</div>
+        <div class="stat-value" id="stat-affiliates">0</div>
+        <div class="stat-sub">actief</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">Sponsor slot</div>
+        <div class="stat-value" id="stat-sponsor">—</div>
+        <div class="stat-sub">status</div>
+      </div>
+    </div>
+
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:1.25rem">
+      <div class="card">
+        <div class="card-title"><span>✍️</span> Recente blogartikelen</div>
+        <div id="dashboard-blogs">
+          <p style="font-size:14px;color:rgba(255,255,255,.3);padding:.5rem 0">Nog geen artikelen. <button class="btn btn-sm btn-rose" onclick="showPanel('blog')" style="margin-left:.5rem">Schrijf je eerste artikel</button></p>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-title"><span>🔗</span> Snelle acties</div>
+        <div style="display:flex;flex-direction:column;gap:.75rem">
+          <button class="btn btn-dark btn-full" onclick="showPanel('blog');openNewBlog()">✍️ Nieuw blogartikel schrijven</button>
+          <button class="btn btn-dark btn-full" onclick="showPanel('voorbeelden');openNewVoorbeeld()">🎪 Nieuw voorbeeldfeestje toevoegen</button>
+          <button class="btn btn-dark btn-full" onclick="showPanel('affiliates')">🔗 Affiliate link toevoegen</button>
+          <button class="btn btn-dark btn-full" onclick="showPanel('teksten')">📝 Paginateksten aanpassen</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="card" style="margin-top:1.25rem">
+      <div class="card-title"><span>💡</span> Tips voor meer inkomsten</div>
+      <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:1rem">
+        <div style="background:#0f0f23;border-radius:var(--radius);padding:1rem">
+          <div style="font-size:20px;margin-bottom:.5rem">📌</div>
+          <div style="font-size:13px;font-weight:500;color:white;margin-bottom:.25rem">bol.com partner</div>
+          <div style="font-size:12px;color:rgba(255,255,255,.4);line-height:1.6">Meld je aan bij partnernetwerk.bol.com voor 4-8% commissie op elke aankoop.</div>
+        </div>
+        <div style="background:#0f0f23;border-radius:var(--radius);padding:1rem">
+          <div style="font-size:20px;margin-bottom:.5rem">⭐</div>
+          <div style="font-size:13px;font-weight:500;color:white;margin-bottom:.25rem">Sponsor slot</div>
+          <div style="font-size:12px;color:rgba(255,255,255,.4);line-height:1.6">Één vaste feestwinkel als sponsor: €200-500/maand voor prominente plaatsing.</div>
+        </div>
+        <div style="background:#0f0f23;border-radius:var(--radius);padding:1rem">
+          <div style="font-size:20px;margin-bottom:.5rem">📝</div>
+          <div style="font-size:13px;font-weight:500;color:white;margin-bottom:.25rem">SEO via blogs</div>
+          <div style="font-size:12px;color:rgba(255,255,255,.4);line-height:1.6">Schrijf wekelijks één blogartikel over een populair thema. Google stuurt je gratis bezoekers.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- BLOG -->
+  <div class="panel" id="panel-blog">
+    <div class="page-header">
+      <div style="display:flex;justify-content:space-between;align-items:flex-start">
+        <div>
+          <div class="page-title">Blogartikelen</div>
+          <div class="page-sub">Schrijf SEO-artikelen om bezoekers aan te trekken</div>
+        </div>
+        <button class="btn btn-rose" onclick="openNewBlog()">+ Nieuw artikel</button>
+      </div>
+    </div>
+
+    <div id="blog-list-view">
+      <div class="card">
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>Titel</th>
+                <th>Categorie</th>
+                <th>Status</th>
+                <th>Datum</th>
+                <th>Acties</th>
+              </tr>
+            </thead>
+            <tbody id="blog-table-body">
+              <tr><td colspan="5" style="text-align:center;color:rgba(255,255,255,.3);padding:2rem">Nog geen artikelen. Klik op "Nieuw artikel" om te beginnen.</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <div id="blog-edit-view" style="display:none">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:1.5rem">
+        <button class="btn btn-dark" onclick="closeBlogEdit()">← Terug naar overzicht</button>
+        <div style="display:flex;gap:.75rem">
+          <button class="btn btn-dark" onclick="saveBlog('concept')">Opslaan als concept</button>
+          <button class="btn btn-rose" onclick="saveBlog('gepubliceerd')">Publiceren</button>
+        </div>
+      </div>
+
+      <input type="hidden" id="blog-edit-id">
+      <div class="form-grid" style="margin-bottom:1rem">
+        <div class="field">
+          <label>Titel *</label>
+          <input type="text" id="blog-titel" placeholder="bijv. Kinderfeestje met €100 budget">
+        </div>
+        <div class="field">
+          <label>Categorie</label>
+          <select id="blog-cat">
+            <option value="Budget & planning">Budget & planning</option>
+            <option value="DIY & decoratie">DIY & decoratie</option>
+            <option value="Eten & taart">Eten & taart</option>
+            <option value="Activiteiten">Activiteiten</option>
+            <option value="Eerste verjaardag">Eerste verjaardag</option>
+            <option value="Inspiratie">Inspiratie</option>
+            <option value="Duurzaamheid">Duurzaamheid</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="field">
+        <label>Korte beschrijving (voor Google & overzicht)</label>
+        <input type="text" id="blog-desc" placeholder="Max 160 tekens — dit ziet Google">
+      </div>
+
+      <div class="field">
+        <label>Inhoud artikel</label>
+        <div class="editor-toolbar">
+          <button class="editor-btn" onclick="fmt('bold')"><b>B</b></button>
+          <button class="editor-btn" onclick="fmt('italic')"><i>I</i></button>
+          <button class="editor-btn" onclick="fmt('underline')"><u>U</u></button>
+          <button class="editor-btn" onclick="fmtH2()">H2</button>
+          <button class="editor-btn" onclick="fmtH3()">H3</button>
+          <button class="editor-btn" onclick="fmt('insertUnorderedList')">• Lijst</button>
+          <button class="editor-btn" onclick="fmt('insertOrderedList')">1. Lijst</button>
+          <button class="editor-btn" onclick="insertLink()">🔗 Link</button>
+          <button class="editor-btn" onclick="insertAffLink()">💰 Affiliate link</button>
+        </div>
+        <div class="editor-content" id="blog-inhoud" contenteditable="true" data-placeholder="Schrijf hier je artikel..."></div>
+      </div>
+
+      <div class="form-grid">
+        <div class="field">
+          <label>Emoji icoon (voor de kaart)</label>
+          <input type="text" id="blog-emoji" placeholder="bijv. 💰" maxlength="2">
+        </div>
+        <div class="field">
+          <label>Leestijd (minuten)</label>
+          <input type="number" id="blog-leestijd" placeholder="bijv. 6" min="1" max="60">
+        </div>
+      </div>
+
+      <div class="field">
+        <label>Affiliate links in dit artikel</label>
+        <div id="article-affiliates" style="display:flex;flex-wrap:wrap;gap:.5rem;margin-top:.25rem"></div>
+        <p style="font-size:12px;color:rgba(255,255,255,.3);margin-top:.5rem">Klik op "💰 Affiliate link" in de editor om een link in te voegen</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- VOORBEELDEN -->
+  <div class="panel" id="panel-voorbeelden">
+    <div class="page-header">
+      <div style="display:flex;justify-content:space-between;align-items:flex-start">
+        <div>
+          <div class="page-title">Voorbeeldfeestjes</div>
+          <div class="page-sub">Voeg uitgewerkte feestthema's toe voor SEO</div>
+        </div>
+        <button class="btn btn-rose" onclick="openNewVoorbeeld()">+ Nieuw voorbeeldfeestje</button>
+      </div>
+    </div>
+
+    <div id="vb-list-view">
+      <div class="card">
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr><th>Thema</th><th>Leeftijd</th><th>Budget</th><th>Locatie</th><th>Status</th><th>Acties</th></tr>
+            </thead>
+            <tbody id="vb-table-body">
+              <tr><td colspan="6" style="text-align:center;color:rgba(255,255,255,.3);padding:2rem">Nog geen voorbeelden. Klik op "Nieuw voorbeeldfeestje" om te beginnen.</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <div id="vb-edit-view" style="display:none">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:1.5rem">
+        <button class="btn btn-dark" onclick="closeVbEdit()">← Terug</button>
+        <button class="btn btn-rose" onclick="saveVoorbeeld()">Opslaan</button>
+      </div>
+
+      <input type="hidden" id="vb-edit-id">
+      <div class="form-grid">
+        <div class="field"><label>Thema naam *</label><input type="text" id="vb-thema" placeholder="bijv. Dinosaurus Expedition"></div>
+        <div class="field"><label>Subtitel (script)</label><input type="text" id="vb-subtitel" placeholder="bijv. Fossiel avontuur"></div>
+      </div>
+      <div class="form-grid">
+        <div class="field"><label>Emoji icoon</label><input type="text" id="vb-emoji" placeholder="bijv. 🦕" maxlength="2"></div>
+        <div class="field"><label>Achtergrondkleur kaart</label><input type="color" id="vb-kleur" value="#EAF3DE"></div>
+      </div>
+      <div class="form-grid">
+        <div class="field">
+          <label>Leeftijd</label>
+          <select id="vb-leeftijd">
+            <option>1–3 jaar</option><option>3–6 jaar</option><option>4–8 jaar</option>
+            <option>5–9 jaar</option><option>6–10 jaar</option>
+          </select>
+        </div>
+        <div class="field">
+          <label>Budget</label>
+          <select id="vb-budget">
+            <option>€50–€100</option><option>€75–€125</option><option>€100–€150</option>
+            <option>€150–€200</option><option>€150–€250</option><option>€250–€400</option>
+          </select>
+        </div>
+      </div>
+      <div class="form-grid">
+        <div class="field">
+          <label>Locatie</label>
+          <select id="vb-locatie">
+            <option>Tuin</option><option>Thuis (binnen)</option><option>Park</option>
+            <option>Feestzaal</option><option>Tuin of park</option>
+          </select>
+        </div>
+        <div class="field">
+          <label>Categorie</label>
+          <select id="vb-categorie">
+            <option value="avontuur">Avontuur</option>
+            <option value="magisch">Magisch</option>
+            <option value="natuur">Natuur</option>
+            <option value="sport">Sport & actief</option>
+            <option value="creatief">Creatief</option>
+          </select>
+        </div>
+      </div>
+      <div class="field"><label>Korte beschrijving</label><textarea id="vb-desc" placeholder="2-3 zinnen over dit feestthema..."></textarea></div>
+      <div class="field"><label>Tags (komma-gescheiden)</label><input type="text" id="vb-tags" placeholder="bijv. DIY-vriendelijk, Buiten, Budget"></div>
+
+      <div class="card" style="margin-top:1rem">
+        <div class="card-title"><span>🛒</span> Affiliate links voor dit thema</div>
+        <div class="form-grid">
+          <div class="field"><label>bol.com link</label><input type="url" id="vb-bol" placeholder="https://www.bol.com/..."></div>
+          <div class="field"><label>Action link</label><input type="url" id="vb-action" placeholder="https://www.action.com/..."></div>
+        </div>
+        <div class="field"><label>HEMA link</label><input type="url" id="vb-hema" placeholder="https://www.hema.nl/..."></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- TEKSTEN -->
+  <div class="panel" id="panel-teksten">
+    <div class="page-header">
+      <div class="page-title">Paginateksten</div>
+      <div class="page-sub">Pas de teksten op je website aan — wijzigingen worden opgeslagen in de browser</div>
+    </div>
+
+    <div class="card">
+      <div class="card-title"><span>🦸</span> Hero sectie</div>
+      <div class="field"><label>Hoofdtitel regel 1</label><input type="text" id="txt-hero1" placeholder="Het perfecte"></div>
+      <div class="field"><label>Hoofdtitel regel 2</label><input type="text" id="txt-hero2" placeholder="feestje voor"></div>
+      <div class="field"><label>Hoofdtitel accent (roos)</label><input type="text" id="txt-hero-em" placeholder="jouw kind."></div>
+      <div class="field"><label>Beschrijving</label><textarea id="txt-hero-desc" style="min-height:80px" placeholder="Vul een paar gegevens in..."></textarea></div>
+    </div>
+
+    <div class="card">
+      <div class="card-title"><span>⭐</span> Reviews</div>
+      <div style="margin-bottom:1rem;padding-bottom:1rem;border-bottom:1px solid rgba(255,255,255,.07)">
+        <div class="field"><label>Review 1 tekst</label><textarea id="txt-rev1" style="min-height:70px"></textarea></div>
+        <div class="field"><label>Review 1 auteur</label><input type="text" id="txt-rev1-author"></div>
+      </div>
+      <div style="margin-bottom:1rem;padding-bottom:1rem;border-bottom:1px solid rgba(255,255,255,.07)">
+        <div class="field"><label>Review 2 tekst</label><textarea id="txt-rev2" style="min-height:70px"></textarea></div>
+        <div class="field"><label>Review 2 auteur</label><input type="text" id="txt-rev2-author"></div>
+      </div>
+      <div>
+        <div class="field"><label>Review 3 tekst</label><textarea id="txt-rev3" style="min-height:70px"></textarea></div>
+        <div class="field"><label>Review 3 auteur</label><input type="text" id="txt-rev3-author"></div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title"><span>📧</span> Newsletter</div>
+      <div class="field"><label>Titel</label><input type="text" id="txt-nl-title"></div>
+      <div class="field"><label>Beschrijving</label><input type="text" id="txt-nl-desc"></div>
+    </div>
+
+    <div style="display:flex;gap:.75rem">
+      <button class="btn btn-rose" onclick="saveTeksten()">Wijzigingen opslaan</button>
+      <button class="btn btn-dark" onclick="loadTeksten()">Originele versie herstellen</button>
+    </div>
+  </div>
+
+  <!-- AFFILIATES -->
+  <div class="panel" id="panel-affiliates">
+    <div class="page-header">
+      <div class="page-title">Affiliate links</div>
+      <div class="page-sub">Beheer alle affiliate links en verdien commissie op elke aankoop</div>
+    </div>
+
+    <div class="card">
+      <div class="card-title"><span>➕</span> Nieuwe affiliate link toevoegen</div>
+      <div class="form-grid">
+        <div class="field"><label>Winkel naam *</label><input type="text" id="aff-naam" placeholder="bijv. bol.com"></div>
+        <div class="field"><label>Winkel emoji</label><input type="text" id="aff-emoji" placeholder="bijv. 🛒" maxlength="2"></div>
+      </div>
+      <div class="field"><label>Affiliate URL *</label><input type="url" id="aff-url" placeholder="https://partner.bol.com/..."></div>
+      <div class="form-grid">
+        <div class="field"><label>Commissie %</label><input type="text" id="aff-pct" placeholder="bijv. 4-8%"></div>
+        <div class="field">
+          <label>Categorie</label>
+          <select id="aff-cat">
+            <option value="decoratie">Decoratie</option>
+            <option value="eten">Eten & drinken</option>
+            <option value="kleding">Kleding & kostuums</option>
+            <option value="speelgoed">Speelgoed & cadeaus</option>
+            <option value="algemeen">Algemeen</option>
+          </select>
+        </div>
+      </div>
+      <button class="btn btn-rose" onclick="addAffiliate()">Link toevoegen</button>
+    </div>
+
+    <div class="card">
+      <div class="card-title"><span>🔗</span> Actieve affiliate links</div>
+      <div id="affiliates-list">
+        <p style="font-size:14px;color:rgba(255,255,255,.3);padding:.5rem 0">Nog geen affiliate links. Voeg je eerste toe hierboven.</p>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title"><span>💡</span> Waar aanmelden?</div>
+      <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:1rem">
+        <a href="https://partnernetwerk.bol.com" target="_blank" style="background:#0f0f23;border-radius:var(--radius);padding:1rem;text-decoration:none;display:block">
+          <div style="font-size:20px;margin-bottom:.5rem">🛒</div>
+          <div style="font-size:13px;font-weight:500;color:white;margin-bottom:.25rem">bol.com Partners</div>
+          <div style="font-size:12px;color:rgba(255,255,255,.4)">4-8% commissie · partnernetwerk.bol.com</div>
+        </a>
+        <a href="https://www.daisycon.com" target="_blank" style="background:#0f0f23;border-radius:var(--radius);padding:1rem;text-decoration:none;display:block">
+          <div style="font-size:20px;margin-bottom:.5rem">🌼</div>
+          <div style="font-size:13px;font-weight:500;color:white;margin-bottom:.25rem">Daisycon</div>
+          <div style="font-size:12px;color:rgba(255,255,255,.4)">Action, HEMA & meer · daisycon.com</div>
+        </a>
+        <a href="https://www.amazon.nl/gp/associates" target="_blank" style="background:#0f0f23;border-radius:var(--radius);padding:1rem;text-decoration:none;display:block">
+          <div style="font-size:20px;margin-bottom:.5rem">📦</div>
+          <div style="font-size:13px;font-weight:500;color:white;margin-bottom:.25rem">Amazon Associates</div>
+          <div style="font-size:12px;color:rgba(255,255,255,.4)">3-10% commissie · amazon.nl</div>
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <!-- SPONSOR -->
+  <div class="panel" id="panel-sponsor">
+    <div class="page-header">
+      <div class="page-title">Sponsor slot</div>
+      <div class="page-sub">Eén vaste partner die prominent getoond wordt op je website</div>
+    </div>
+
+    <div class="card">
+      <div class="card-title"><span>⭐</span> Sponsor instellingen</div>
+      <div class="field">
+        <div class="toggle-wrap">
+          <button class="toggle" id="sponsor-toggle" onclick="toggleSponsor()"></button>
+          <span class="toggle-label">Sponsor slot actief tonen</span>
+        </div>
+      </div>
+      <div class="field"><label>Sponsor naam</label><input type="text" id="sp-naam" placeholder="bijv. Feestartikelen.be"></div>
+      <div class="field"><label>Sponsor tekst</label><input type="text" id="sp-tekst" placeholder="bijv. Gratis levering vanaf €40 — de grootste feestwinkel van België"></div>
+      <div class="field"><label>Knoptekst</label><input type="text" id="sp-btn" placeholder="bijv. Bekijk het aanbod →"></div>
+      <div class="field"><label>Sponsor URL (affiliate link)</label><input type="url" id="sp-url" placeholder="https://..."></div>
+      <div class="field"><label>Maandelijkse vergoeding (voor je eigen administratie)</label><input type="text" id="sp-prijs" placeholder="bijv. €350/maand"></div>
+      <button class="btn btn-rose" onclick="saveSponsor()">Sponsor opslaan</button>
+    </div>
+
+    <div class="card">
+      <div class="card-title"><span>📧</span> Sponsor aanpak</div>
+      <div style="font-size:14px;color:rgba(255,255,255,.5);line-height:1.8">
+        <p style="margin-bottom:.75rem">Stuur dit e-mailsjabloon naar lokale feestartikelen-winkels:</p>
+        <div style="background:#0f0f23;border-radius:var(--radius);padding:1.25rem;font-size:13px;line-height:1.8;color:rgba(255,255,255,.7)">
+          <p>Beste [naam],</p>
+          <br>
+          <p>Ik run Feestplanner.nl, een gratis AI-tool waarmee ouders in 5 minuten een compleet kinderfeestplan genereren. De tool genereert elke maand honderden plannen met bijbehorende boodschappenlijsten.</p>
+          <br>
+          <p>Ik heb ruimte voor één vaste partner die ik prominent aanraad in elk gegenereerd plan. Dit betekent dat elke ouder die een feestplan maakt jouw winkel als eerste aanbeveling ziet.</p>
+          <br>
+          <p>Interesse om te bespreken? Ik stel een sponsorship voor van €[X]/maand.</p>
+          <br>
+          <p>Met vriendelijke groet,<br>[Jouw naam]</p>
+        </div>
+        <button class="btn btn-dark btn-sm" style="margin-top:.75rem" onclick="copyEmail()">📋 Kopieer e-mail</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- INSTELLINGEN -->
+  <div class="panel" id="panel-instellingen">
+    <div class="page-header">
+      <div class="page-title">Instellingen</div>
+      <div class="page-sub">Algemene instellingen van je Feestplanner</div>
+    </div>
+
+    <div class="card">
+      <div class="card-title"><span>🌐</span> Website info</div>
+      <div class="field"><label>Website naam</label><input type="text" id="set-naam" value="Feestplanner"></div>
+      <div class="field"><label>Tagline</label><input type="text" id="set-tagline" value="Planning met plezier"></div>
+      <div class="field"><label>Website URL</label><input type="url" id="set-url" placeholder="https://feestplanner.netlify.app"></div>
+      <div class="field"><label>Contact e-mail</label><input type="email" id="set-email" placeholder="jouw@email.be"></div>
+      <button class="btn btn-rose" onclick="saveInstellingen()">Opslaan</button>
+    </div>
+
+    <div class="card">
+      <div class="card-title"><span>🗑️</span> Data beheer</div>
+      <p style="font-size:14px;color:rgba(255,255,255,.4);margin-bottom:1rem">Alle inhoud wordt opgeslagen in de browser (localStorage). Exporteer regelmatig een backup.</p>
+      <div style="display:flex;gap:.75rem;flex-wrap:wrap">
+        <button class="btn btn-dark" onclick="exportData()">📥 Exporteer backup</button>
+        <button class="btn btn-dark" onclick="importData()">📤 Importeer backup</button>
+        <button class="btn btn-danger" onclick="clearAll()">🗑️ Alles wissen</button>
+      </div>
+      <input type="file" id="import-file" style="display:none" accept=".json" onchange="handleImport(event)">
+    </div>
+  </div>
+
+</main>
+
+<script>
+const DB = {
+  get(key) { try { return JSON.parse(localStorage.getItem('fp_admin_' + key) || 'null'); } catch { return null; } },
+  set(key, val) { localStorage.setItem('fp_admin_' + key, JSON.stringify(val)); },
+  del(key) { localStorage.removeItem('fp_admin_' + key); }
+};
+
+// ── NAVIGATION ──────────────────────────────────────────────
+function showPanel(id) {
+  document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+  document.getElementById('panel-' + id).classList.add('active');
+  document.querySelectorAll('.nav-item').forEach(n => {
+    if (n.getAttribute('onclick')?.includes("'" + id + "'")) n.classList.add('active');
+  });
+  updateDashboard();
+}
+
+// ── TOAST ───────────────────────────────────────────────────
+function toast(msg, type = 'success') {
+  const t = document.createElement('div');
+  t.className = `toast ${type}`;
+  t.innerHTML = (type === 'success' ? '✅ ' : '❌ ') + msg;
+  document.body.appendChild(t);
+  setTimeout(() => t.remove(), 2800);
+}
+
+// ── DASHBOARD ───────────────────────────────────────────────
+function updateDashboard() {
+  const blogs = DB.get('blogs') || [];
+  const vb = DB.get('voorbeelden') || [];
+  const aff = DB.get('affiliates') || [];
+  const sp = DB.get('sponsor');
+  document.getElementById('stat-blogs').textContent = blogs.filter(b => b.status === 'gepubliceerd').length;
+  document.getElementById('stat-voorbeelden').textContent = vb.length;
+  document.getElementById('stat-affiliates').textContent = aff.length;
+  document.getElementById('stat-sponsor').textContent = sp?.actief ? 'Actief' : 'Inactief';
+
+  const dbBlogs = document.getElementById('dashboard-blogs');
+  const recent = blogs.slice(-3).reverse();
+  if (recent.length) {
+    dbBlogs.innerHTML = recent.map(b => `
+      <div style="display:flex;align-items:center;gap:.75rem;padding:.625rem 0;border-bottom:.5px solid rgba(255,255,255,.05)">
+        <span style="font-size:20px">${b.emoji || '📝'}</span>
+        <div style="flex:1">
+          <div style="font-size:14px;color:white">${b.titel}</div>
+          <div style="font-size:12px;color:rgba(255,255,255,.3)">${b.categorie}</div>
+        </div>
+        <span class="badge ${b.status === 'gepubliceerd' ? 'badge-mint' : 'badge-gray'}">${b.status}</span>
+      </div>`).join('');
+  }
+}
+
+// ── BLOG ────────────────────────────────────────────────────
+function openNewBlog() {
+  document.getElementById('blog-edit-id').value = '';
+  document.getElementById('blog-titel').value = '';
+  document.getElementById('blog-desc').value = '';
+  document.getElementById('blog-inhoud').innerHTML = '';
+  document.getElementById('blog-emoji').value = '';
+  document.getElementById('blog-leestijd').value = '';
+  document.getElementById('blog-list-view').style.display = 'none';
+  document.getElementById('blog-edit-view').style.display = 'block';
+}
+
+function closeBlogEdit() {
+  document.getElementById('blog-list-view').style.display = 'block';
+  document.getElementById('blog-edit-view').style.display = 'none';
+  renderBlogTable();
+}
+
+function saveBlog(status) {
+  const titel = document.getElementById('blog-titel').value.trim();
+  if (!titel) { toast('Vul een titel in', 'error'); return; }
+  const blogs = DB.get('blogs') || [];
+  const id = document.getElementById('blog-edit-id').value || Date.now().toString();
+  const existing = blogs.findIndex(b => b.id === id);
+  const blog = {
+    id, titel, status,
+    categorie: document.getElementById('blog-cat').value,
+    desc: document.getElementById('blog-desc').value,
+    inhoud: document.getElementById('blog-inhoud').innerHTML,
+    emoji: document.getElementById('blog-emoji').value || '📝',
+    leestijd: document.getElementById('blog-leestijd').value || '5',
+    datum: new Date().toLocaleDateString('nl-BE')
+  };
+  if (existing >= 0) blogs[existing] = blog; else blogs.push(blog);
+  DB.set('blogs', blogs);
+  toast('Artikel opgeslagen!');
+  closeBlogEdit();
+}
+
+function renderBlogTable() {
+  const blogs = DB.get('blogs') || [];
+  const tbody = document.getElementById('blog-table-body');
+  if (!blogs.length) {
+    tbody.innerHTML = '<tr><td colspan="5" style="text-align:center;color:rgba(255,255,255,.3);padding:2rem">Nog geen artikelen.</td></tr>';
+    return;
+  }
+  tbody.innerHTML = blogs.map(b => `
+    <tr>
+      <td><span style="margin-right:.5rem">${b.emoji}</span>${b.titel}</td>
+      <td><span class="badge badge-gray">${b.categorie}</span></td>
+      <td><span class="badge ${b.status === 'gepubliceerd' ? 'badge-mint' : 'badge-gray'}">${b.status}</span></td>
+      <td>${b.datum}</td>
+      <td><div style="display:flex;gap:.5rem">
+        <button class="btn btn-sm btn-dark" onclick="editBlog('${b.id}')">Bewerken</button>
+        <button class="btn btn-sm btn-danger" onclick="deleteBlog('${b.id}')">Wissen</button>
+      </div></td>
+    </tr>`).join('');
+}
+
+function editBlog(id) {
+  const blogs = DB.get('blogs') || [];
+  const b = blogs.find(x => x.id === id);
+  if (!b) return;
+  document.getElementById('blog-edit-id').value = b.id;
+  document.getElementById('blog-titel').value = b.titel;
+  document.getElementById('blog-cat').value = b.categorie;
+  document.getElementById('blog-desc').value = b.desc;
+  document.getElementById('blog-inhoud').innerHTML = b.inhoud;
+  document.getElementById('blog-emoji').value = b.emoji;
+  document.getElementById('blog-leestijd').value = b.leestijd;
+  document.getElementById('blog-list-view').style.display = 'none';
+  document.getElementById('blog-edit-view').style.display = 'block';
+}
+
+function deleteBlog(id) {
+  if (!confirm('Dit artikel verwijderen?')) return;
+  const blogs = (DB.get('blogs') || []).filter(b => b.id !== id);
+  DB.set('blogs', blogs);
+  renderBlogTable();
+  toast('Artikel verwijderd');
+}
+
+function fmt(cmd) { document.execCommand(cmd, false, null); }
+function fmtH2() { document.execCommand('formatBlock', false, 'h2'); }
+function fmtH3() { document.execCommand('formatBlock', false, 'h3'); }
+function insertLink() {
+  const url = prompt('URL (inclusief https://):');
+  const tekst = prompt('Linktekst:');
+  if (url && tekst) document.execCommand('insertHTML', false, `<a href="${url}" target="_blank" rel="noopener">${tekst}</a>`);
+}
+function insertAffLink() {
+  const affs = DB.get('affiliates') || [];
+  if (!affs.length) { toast('Voeg eerst affiliate links toe in het menu links', 'error'); return; }
+  const keuze = prompt('Kies winkel:\n' + affs.map((a, i) => `${i+1}. ${a.naam}`).join('\n') + '\n\nTyp het nummer:');
+  const idx = parseInt(keuze) - 1;
+  if (affs[idx]) {
+    const tekst = prompt('Linktekst:', affs[idx].naam);
+    if (tekst) document.execCommand('insertHTML', false, `<a href="${affs[idx].url}" target="_blank" rel="noopener sponsored">${tekst}</a>`);
+  }
+}
+
+// ── VOORBEELDEN ─────────────────────────────────────────────
+function openNewVoorbeeld() {
+  document.getElementById('vb-edit-id').value = '';
+  ['vb-thema','vb-subtitel','vb-desc','vb-tags','vb-bol','vb-action','vb-hema'].forEach(id => document.getElementById(id).value = '');
+  document.getElementById('vb-emoji').value = '';
+  document.getElementById('vb-kleur').value = '#EAF3DE';
+  document.getElementById('vb-list-view').style.display = 'none';
+  document.getElementById('vb-edit-view').style.display = 'block';
+}
+
+function closeVbEdit() {
+  document.getElementById('vb-list-view').style.display = 'block';
+  document.getElementById('vb-edit-view').style.display = 'none';
+  renderVbTable();
+}
+
+function saveVoorbeeld() {
+  const thema = document.getElementById('vb-thema').value.trim();
+  if (!thema) { toast('Vul een thema in', 'error'); return; }
+  const vbs = DB.get('voorbeelden') || [];
+  const id = document.getElementById('vb-edit-id').value || Date.now().toString();
+  const existing = vbs.findIndex(v => v.id === id);
+  const vb = {
+    id, thema,
+    subtitel: document.getElementById('vb-subtitel').value,
+    emoji: document.getElementById('vb-emoji').value || '🎪',
+    kleur: document.getElementById('vb-kleur').value,
+    leeftijd: document.getElementById('vb-leeftijd').value,
+    budget: document.getElementById('vb-budget').value,
+    locatie: document.getElementById('vb-locatie').value,
+    categorie: document.getElementById('vb-categorie').value,
+    desc: document.getElementById('vb-desc').value,
+    tags: document.getElementById('vb-tags').value,
+    bol: document.getElementById('vb-bol').value,
+    action: document.getElementById('vb-action').value,
+    hema: document.getElementById('vb-hema').value,
+  };
+  if (existing >= 0) vbs[existing] = vb; else vbs.push(vb);
+  DB.set('voorbeelden', vbs);
+  toast('Voorbeeldfeestje opgeslagen!');
+  closeVbEdit();
+}
+
+function renderVbTable() {
+  const vbs = DB.get('voorbeelden') || [];
+  const tbody = document.getElementById('vb-table-body');
+  if (!vbs.length) {
+    tbody.innerHTML = '<tr><td colspan="6" style="text-align:center;color:rgba(255,255,255,.3);padding:2rem">Nog geen voorbeelden.</td></tr>';
+    return;
+  }
+  tbody.innerHTML = vbs.map(v => `
+    <tr>
+      <td><span style="margin-right:.5rem">${v.emoji}</span>${v.thema}</td>
+      <td>${v.leeftijd}</td>
+      <td>${v.budget}</td>
+      <td>${v.locatie}</td>
+      <td><span class="badge badge-mint">Online</span></td>
+      <td><div style="display:flex;gap:.5rem">
+        <button class="btn btn-sm btn-dark" onclick="editVoorbeeld('${v.id}')">Bewerken</button>
+        <button class="btn btn-sm btn-danger" onclick="deleteVoorbeeld('${v.id}')">Wissen</button>
+      </div></td>
+    </tr>`).join('');
+}
+
+function editVoorbeeld(id) {
+  const vbs = DB.get('voorbeelden') || [];
+  const v = vbs.find(x => x.id === id);
+  if (!v) return;
+  document.getElementById('vb-edit-id').value = v.id;
+  document.getElementById('vb-thema').value = v.thema;
+  document.getElementById('vb-subtitel').value = v.subtitel || '';
+  document.getElementById('vb-emoji').value = v.emoji;
+  document.getElementById('vb-kleur').value = v.kleur || '#EAF3DE';
+  document.getElementById('vb-leeftijd').value = v.leeftijd;
+  document.getElementById('vb-budget').value = v.budget;
+  document.getElementById('vb-locatie').value = v.locatie;
+  document.getElementById('vb-categorie').value = v.categorie;
+  document.getElementById('vb-desc').value = v.desc || '';
+  document.getElementById('vb-tags').value = v.tags || '';
+  document.getElementById('vb-bol').value = v.bol || '';
+  document.getElementById('vb-action').value = v.action || '';
+  document.getElementById('vb-hema').value = v.hema || '';
+  document.getElementById('vb-list-view').style.display = 'none';
+  document.getElementById('vb-edit-view').style.display = 'block';
+}
+
+function deleteVoorbeeld(id) {
+  if (!confirm('Dit voorbeeldfeestje verwijderen?')) return;
+  const vbs = (DB.get('voorbeelden') || []).filter(v => v.id !== id);
+  DB.set('voorbeelden', vbs);
+  renderVbTable();
+  toast('Voorbeeldfeestje verwijderd');
+}
+
+// ── TEKSTEN ─────────────────────────────────────────────────
+const TEKST_DEFAULTS = {
+  hero1: 'Het perfecte', hero2: 'feestje voor', 'hero-em': 'jouw kind.',
+  'hero-desc': 'Vul een paar gegevens in en krijg direct een compleet, coherent feestplan — van concept tot boodschappenlijst. Gratis. In 5 minuten.',
+  rev1: '"In 5 minuten had ik een compleet plan dat ik zelf nooit zo mooi bedacht had. Het dinosaurus-feestje van mijn zoontje was een absolute hit!"',
+  'rev1-author': '— Lies V., mama van Finn (5)',
+  rev2: '"Eindelijk een tool die niet alleen ideeën geeft maar ook een echte boodschappenlijst met prijzen. Zo handig!"',
+  'rev2-author': '— Sarah M., mama van Emma (7)',
+  rev3: '"Het plan was zo coherent — alles paste bij elkaar. Mijn dochter dacht dat ik een professional had ingehuurd!"',
+  'rev3-author': '— Tom D., papa van Nora (6)',
+  'nl-title': 'Wekelijkse feestinspiratie in jouw inbox.',
+  'nl-desc': 'Seizoensthema\'s, DIY-tutorials en kortingscodes — elke week gratis.'
+};
+
+function loadTeksten() {
+  const saved = DB.get('teksten') || {};
+  Object.keys(TEKST_DEFAULTS).forEach(k => {
+    const el = document.getElementById('txt-' + k);
+    if (el) el.value = saved[k] || TEKST_DEFAULTS[k];
+  });
+}
+
+function saveTeksten() {
+  const data = {};
+  Object.keys(TEKST_DEFAULTS).forEach(k => {
+    const el = document.getElementById('txt-' + k);
+    if (el) data[k] = el.value;
+  });
+  DB.set('teksten', data);
+  // Also sync to main site edits format
+  const siteEdits = {};
+  if (data.hero1) siteEdits['hero-line1'] = data.hero1;
+  if (data.hero2) siteEdits['hero-line2'] = data.hero2;
+  if (data['hero-em']) siteEdits['hero-em'] = data['hero-em'];
+  if (data['hero-desc']) siteEdits['hero-desc'] = data['hero-desc'];
+  if (data.rev1) siteEdits['rev1'] = data.rev1;
+  if (data['rev1-author']) siteEdits['rev1-author'] = data['rev1-author'];
+  if (data.rev2) siteEdits['rev2'] = data.rev2;
+  if (data['rev2-author']) siteEdits['rev2-author'] = data['rev2-author'];
+  if (data.rev3) siteEdits['rev3'] = data.rev3;
+  if (data['rev3-author']) siteEdits['rev3-author'] = data['rev3-author'];
+  if (data['nl-title']) siteEdits['nl-title'] = data['nl-title'];
+  if (data['nl-desc']) siteEdits['nl-desc'] = data['nl-desc'];
+  localStorage.setItem('fp_edits', JSON.stringify(siteEdits));
+  toast('Teksten opgeslagen! Ze zijn nu ook zichtbaar op de website.');
+}
+
+// ── AFFILIATES ──────────────────────────────────────────────
+function addAffiliate() {
+  const naam = document.getElementById('aff-naam').value.trim();
+  const url  = document.getElementById('aff-url').value.trim();
+  if (!naam || !url) { toast('Naam en URL zijn verplicht', 'error'); return; }
+  const affs = DB.get('affiliates') || [];
+  affs.push({
+    id: Date.now().toString(), naam, url,
+    emoji: document.getElementById('aff-emoji').value || '🔗',
+    pct: document.getElementById('aff-pct').value || '?%',
+    cat: document.getElementById('aff-cat').value
+  });
+  DB.set('affiliates', affs);
+  ['aff-naam','aff-url','aff-emoji','aff-pct'].forEach(id => document.getElementById(id).value = '');
+  renderAffiliates();
+  toast('Affiliate link toegevoegd!');
+}
+
+function renderAffiliates() {
+  const affs = DB.get('affiliates') || [];
+  const el = document.getElementById('affiliates-list');
+  if (!affs.length) {
+    el.innerHTML = '<p style="font-size:14px;color:rgba(255,255,255,.3);padding:.5rem 0">Nog geen affiliate links.</p>';
+    return;
+  }
+  el.innerHTML = affs.map(a => `
+    <div class="affiliate-item">
+      <div class="store-badge" style="background:#0f0f23">${a.emoji}</div>
+      <div class="affiliate-info">
+        <div class="affiliate-name">${a.naam}</div>
+        <div class="affiliate-url">${a.url}</div>
+      </div>
+      <div class="affiliate-pct">${a.pct}</div>
+      <div class="affiliate-actions">
+        <a href="${a.url}" target="_blank" class="btn btn-sm btn-dark">Test →</a>
+        <button class="btn btn-sm btn-danger" onclick="deleteAffiliate('${a.id}')">✕</button>
+      </div>
+    </div>`).join('');
+}
+
+function deleteAffiliate(id) {
+  if (!confirm('Deze affiliate link verwijderen?')) return;
+  const affs = (DB.get('affiliates') || []).filter(a => a.id !== id);
+  DB.set('affiliates', affs);
+  renderAffiliates();
+  toast('Link verwijderd');
+}
+
+// ── SPONSOR ─────────────────────────────────────────────────
+function toggleSponsor() {
+  const btn = document.getElementById('sponsor-toggle');
+  btn.classList.toggle('on');
+}
+
+function saveSponsor() {
+  const actief = document.getElementById('sponsor-toggle').classList.contains('on');
+  const sp = {
+    actief,
+    naam: document.getElementById('sp-naam').value,
+    tekst: document.getElementById('sp-tekst').value,
+    btn: document.getElementById('sp-btn').value,
+    url: document.getElementById('sp-url').value,
+    prijs: document.getElementById('sp-prijs').value,
+  };
+  DB.set('sponsor', sp);
+  // Sync to main site
+  const siteEdits = JSON.parse(localStorage.getItem('fp_edits') || '{}');
+  if (sp.tekst) siteEdits['sponsor-text'] = sp.tekst;
+  if (sp.btn) siteEdits['sponsor-btn'] = sp.btn;
+  localStorage.setItem('fp_edits', JSON.stringify(siteEdits));
+  toast('Sponsor opgeslagen!');
+  updateDashboard();
+}
+
+function loadSponsor() {
+  const sp = DB.get('sponsor');
+  if (!sp) return;
+  if (sp.actief) document.getElementById('sponsor-toggle').classList.add('on');
+  if (sp.naam) document.getElementById('sp-naam').value = sp.naam;
+  if (sp.tekst) document.getElementById('sp-tekst').value = sp.tekst;
+  if (sp.btn) document.getElementById('sp-btn').value = sp.btn;
+  if (sp.url) document.getElementById('sp-url').value = sp.url;
+  if (sp.prijs) document.getElementById('sp-prijs').value = sp.prijs;
+}
+
+function copyEmail() {
+  const txt = document.querySelector('.editor-content') ? '' : '';
+  navigator.clipboard.writeText(`Beste [naam],\n\nIk run Feestplanner.nl, een gratis AI-tool waarmee ouders in 5 minuten een compleet kinderfeestplan genereren.\n\nIk heb ruimte voor één vaste partner die ik prominent aanraad in elk gegenereerd plan.\n\nInteresse? Ik stel een sponsorship voor van €[X]/maand.\n\nMet vriendelijke groet,\n[Jouw naam]`);
+  toast('E-mail gekopieerd!');
+}
+
+// ── DATA BEHEER ──────────────────────────────────────────────
+function exportData() {
+  const data = {};
+  ['blogs','voorbeelden','affiliates','sponsor','teksten'].forEach(k => {
+    data[k] = DB.get(k);
+  });
+  const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = 'feestplanner-backup-' + new Date().toISOString().split('T')[0] + '.json';
+  a.click();
+  toast('Backup gedownload!');
+}
+
+function importData() { document.getElementById('import-file').click(); }
+
+function handleImport(e) {
+  const file = e.target.files[0];
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = (ev) => {
+    try {
+      const data = JSON.parse(ev.target.result);
+      Object.keys(data).forEach(k => { if (data[k]) DB.set(k, data[k]); });
+      toast('Backup hersteld!');
+      location.reload();
+    } catch { toast('Ongeldig bestand', 'error'); }
+  };
+  reader.readAsText(file);
+}
+
+function clearAll() {
+  if (!confirm('Weet je zeker dat je ALLE data wil wissen? Dit kan niet ongedaan gemaakt worden.')) return;
+  ['blogs','voorbeelden','affiliates','sponsor','teksten'].forEach(k => DB.del(k));
+  toast('Alle data gewist');
+  location.reload();
+}
+
+function saveInstellingen() {
+  DB.set('instellingen', {
+    naam: document.getElementById('set-naam').value,
+    tagline: document.getElementById('set-tagline').value,
+    url: document.getElementById('set-url').value,
+    email: document.getElementById('set-email').value,
+  });
+  toast('Instellingen opgeslagen!');
+}
+
+// ── INIT ─────────────────────────────────────────────────────
+updateDashboard();
+loadTeksten();
+loadSponsor();
+renderBlogTable();
+renderVbTable();
+renderAffiliates();
+</script>
+</body>
+</html>
