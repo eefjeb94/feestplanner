@@ -1,0 +1,781 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Feestplanner — Gratis AI Kinderfeestje Planner | Compleet Plan in 5 Minuten</title>
+<meta name="description" content="Maak gratis een compleet kinderfeestplan op maat. Van concept tot boodschappenlijst — AI-gestuurd, coherent en doable. Voor elk thema, budget en locatie.">
+<meta name="keywords" content="kinderfeestje plannen, verjaardagsfeest kind, feestplan generator, kinderfeest ideeën, verjaardagsfeestje thuis, kinderfeest budget">
+<meta property="og:title" content="Feestplanner — Jouw perfecte kinderfeestje in 5 minuten">
+<meta property="og:description" content="Gratis AI-feestplanner voor ouders. Vul je details in en krijg direct een compleet plan.">
+<link rel="canonical" href="https://feestplanner.nl/">
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"WebApplication","name":"Feestplanner","description":"Gratis AI kinderfeestplanner","applicationCategory":"LifestyleApplication","offers":{"@type":"Offer","price":"0","priceCurrency":"EUR"}}</script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,900;1,700&family=DM+Sans:wght@300;400;500&family=Dancing+Script:wght@700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --cream:#FDF6F0; --blush:#F5C4B3; --coral:#E8836A; --rose:#D4537E;
+  --rose-light:#FBEAF0; --rose-mid:#F4C0D1; --burgundy:#8B3A52;
+  --mint:#B8E0D2; --mint-light:#E8F5F0; --yellow:#FAE8C0;
+  --dark:#2C1F18; --white:#FFFFFF; --text:#3A2920; --text-muted:#9A8070;
+  --border:rgba(212,83,126,0.13); --radius:16px; --radius-lg:24px; --radius-xl:36px;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'DM Sans',sans-serif;background:var(--cream);color:var(--text);overflow-x:hidden}
+
+/* EDIT MODE */
+.edit-mode [data-editable]{cursor:text;outline:2px dashed rgba(212,83,126,0.4);outline-offset:3px;border-radius:4px}
+.edit-mode [data-editable]:hover{outline-color:var(--rose);background:rgba(212,83,126,0.04)}
+.edit-mode [data-editable]:focus{outline:2px solid var(--rose);background:rgba(212,83,126,0.06)}
+.edit-bar{display:none;position:fixed;top:0;left:0;right:0;z-index:1000;background:var(--dark);color:white;padding:.75rem 2rem;font-size:13px;align-items:center;justify-content:space-between;gap:1rem}
+.edit-bar.visible{display:flex}
+.edit-bar-left{display:flex;align-items:center;gap:12px}
+.edit-dot{width:8px;height:8px;border-radius:50%;background:#4ade80;animation:pulse 2s infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.4}}
+.edit-bar button{background:white;color:var(--dark);border:none;border-radius:8px;padding:6px 14px;font-size:12px;font-weight:500;font-family:'DM Sans',sans-serif;cursor:pointer}
+.edit-bar .btn-save{background:var(--rose);color:white}
+.edit-bar .btn-reset{background:rgba(255,255,255,0.1);color:white}
+
+/* NAV */
+nav{display:flex;align-items:center;justify-content:space-between;padding:1.25rem 3rem;background:var(--white);border-bottom:0.5px solid var(--border);position:sticky;top:0;z-index:90}
+.nav-logo{font-family:'Dancing Script',cursive;font-size:26px;color:var(--rose);text-decoration:none;display:flex;flex-direction:column;line-height:1}
+.nav-logo span{font-family:'DM Sans',sans-serif;font-size:10px;font-weight:500;letter-spacing:.1em;text-transform:uppercase;color:var(--text-muted);margin-top:2px}
+.nav-links{display:flex;gap:2rem;list-style:none}
+.nav-links a{font-size:13px;font-weight:500;color:var(--text-muted);text-decoration:none;transition:color .2s}
+.nav-links a:hover,.nav-links a.active{color:var(--rose)}
+.nav-right{display:flex;gap:.75rem;align-items:center}
+.nav-edit-btn{background:rgba(212,83,126,.1);color:var(--rose);border:1px solid var(--rose-mid);border-radius:99px;padding:6px 14px;font-size:12px;font-weight:500;font-family:'DM Sans',sans-serif;cursor:pointer;transition:all .2s}
+.nav-edit-btn:hover{background:var(--rose-light)}
+.nav-cta{background:var(--rose);color:white;border:none;border-radius:99px;padding:9px 22px;font-size:13px;font-weight:500;font-family:'DM Sans',sans-serif;cursor:pointer;transition:opacity .2s;text-decoration:none;display:inline-block}
+.nav-cta:hover{opacity:.85}
+
+/* HERO */
+.hero{display:grid;grid-template-columns:1fr 1fr;min-height:88vh}
+.hero-left{padding:5rem 4rem 4rem;display:flex;flex-direction:column;justify-content:center;background:var(--white)}
+.hero-right{background:var(--rose-light);position:relative;overflow:hidden;display:flex;align-items:center;justify-content:center;padding:3rem}
+.deco{position:absolute;border-radius:50%;opacity:.45}
+.d1{width:150px;height:150px;background:var(--blush);top:-45px;right:-45px}
+.d2{width:75px;height:75px;background:var(--mint);bottom:100px;left:20px;opacity:.65}
+.d3{width:230px;height:230px;background:var(--yellow);bottom:-90px;right:40px;opacity:.28}
+.preview-card{background:var(--white);border-radius:var(--radius-xl);padding:2rem;width:100%;max-width:380px;position:relative;z-index:1;animation:float 4s ease-in-out infinite}
+@keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-9px)}}
+.pill{display:inline-flex;align-items:center;gap:8px;background:var(--rose-light);color:var(--rose);font-size:11px;font-weight:500;letter-spacing:.1em;text-transform:uppercase;padding:6px 14px;border-radius:99px;margin-bottom:2rem;width:fit-content}
+.pill::before{content:'';width:6px;height:6px;background:var(--rose);border-radius:50%}
+.hero-stats{display:flex;gap:2rem;margin-top:3rem;padding-top:2rem;border-top:.5px solid var(--border)}
+.stat-n{font-family:'Playfair Display',serif;font-size:28px;font-weight:700;color:var(--text);display:block}
+.stat-l{font-size:12px;color:var(--text-muted)}
+
+/* STRIP */
+.strip{background:var(--dark);padding:1.1rem 3rem;display:flex;align-items:center;gap:.875rem;overflow-x:auto;scrollbar-width:none}
+.strip::-webkit-scrollbar{display:none}
+.strip-lbl{font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:rgba(255,255,255,.35);white-space:nowrap;flex-shrink:0}
+.strip a{background:rgba(255,255,255,.07);color:rgba(255,255,255,.7);font-size:13px;font-weight:500;padding:6px 16px;border-radius:99px;white-space:nowrap;text-decoration:none;transition:background .2s;flex-shrink:0}
+.strip a:hover{background:rgba(212,83,126,.35);color:white}
+
+/* HOW */
+.how{background:var(--dark);padding:5rem 3rem;text-align:center}
+.how-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:2rem;max-width:820px;margin:3rem auto 0}
+.how-card{text-align:left}
+.how-n{font-family:'Playfair Display',serif;font-size:48px;font-weight:900;color:var(--rose);opacity:.45;line-height:1;margin-bottom:1rem}
+.how-card h3{font-family:'Playfair Display',serif;font-size:18px;font-weight:700;color:white;margin-bottom:.5rem}
+.how-card p{font-size:14px;color:rgba(255,255,255,.45);line-height:1.7}
+
+/* EXAMPLES */
+.ex-section{padding:5rem 3rem;background:var(--cream)}
+.ex-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1.5rem;margin-top:2.5rem}
+.ex-card{background:var(--white);border-radius:var(--radius-lg);overflow:hidden;border:.5px solid var(--border);transition:transform .2s;text-decoration:none;display:block}
+.ex-card:hover{transform:translateY(-4px)}
+.ex-img{height:180px;display:flex;align-items:center;justify-content:center;font-size:72px}
+.ex-body{padding:1.25rem 1.5rem 1.5rem}
+.ex-cat{font-size:10px;font-weight:500;letter-spacing:.08em;text-transform:uppercase;color:var(--rose);margin-bottom:.5rem}
+.ex-title{font-family:'Playfair Display',serif;font-size:20px;font-weight:700;color:var(--text);margin-bottom:.25rem}
+.ex-script{font-family:'Dancing Script',cursive;font-size:18px;color:var(--coral);margin-bottom:.5rem;display:block}
+.ex-meta{font-size:12px;color:var(--text-muted);margin-bottom:.75rem}
+.tags{display:flex;flex-wrap:wrap;gap:5px}
+.tag{background:var(--rose-light);color:var(--burgundy);font-size:11px;font-weight:500;padding:3px 10px;border-radius:99px}
+.tag.m{background:var(--mint-light);color:#1a6b50}
+.tag.y{background:var(--yellow);color:#7a5a10}
+
+/* REVIEWS */
+.reviews{padding:4rem 3rem;background:var(--white)}
+.rev-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1.5rem;margin-top:2.5rem}
+.rev-card{background:var(--cream);border-radius:var(--radius-lg);padding:1.5rem}
+.rev-stars{color:var(--coral);font-size:15px;margin-bottom:.75rem;letter-spacing:2px}
+.rev-text{font-size:14px;color:var(--text);line-height:1.7;margin-bottom:.875rem;font-style:italic}
+.rev-author{font-size:12px;font-weight:500;color:var(--text-muted)}
+
+/* BLOG */
+.blog-section{padding:5rem 3rem;background:var(--cream)}
+.blog-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1.5rem;margin-top:2.5rem}
+.blog-card{border-radius:var(--radius-lg);border:.5px solid var(--border);overflow:hidden;text-decoration:none;display:block;transition:transform .2s;background:var(--white)}
+.blog-card:hover{transform:translateY(-3px)}
+.blog-img{height:150px;display:flex;align-items:center;justify-content:center;font-size:54px}
+.blog-body{padding:1.25rem}
+.blog-cat{font-size:10px;font-weight:500;letter-spacing:.1em;text-transform:uppercase;color:var(--rose);margin-bottom:.5rem}
+.blog-title{font-family:'Playfair Display',serif;font-size:17px;font-weight:700;color:var(--text);line-height:1.3;margin-bottom:.5rem}
+.blog-exc{font-size:13px;color:var(--text-muted);line-height:1.6}
+
+/* SPONSOR */
+.sponsor-bar{background:var(--yellow);border-radius:var(--radius-lg);padding:1.25rem 1.75rem;display:flex;align-items:center;justify-content:space-between;gap:1rem;margin:0 3rem 0}
+.sponsor-label{font-size:10px;font-weight:500;letter-spacing:.08em;text-transform:uppercase;color:#7a5a10;margin-bottom:.25rem}
+.sponsor-text{font-size:14px;font-weight:500;color:#3a2900}
+.sponsor-btn{background:var(--dark);color:white;border-radius:99px;padding:9px 20px;font-size:13px;font-weight:500;text-decoration:none;white-space:nowrap}
+
+/* FORM */
+.form-wrap{background:var(--white);padding:5rem 3rem}
+.form-section{max-width:900px;margin:0 auto}
+.form-card{background:var(--cream);border:1px solid var(--border);border-radius:var(--radius-lg);padding:2rem;margin-bottom:1.25rem}
+.form-card-title{font-family:'Playfair Display',serif;font-size:17px;font-weight:700;color:var(--text);margin-bottom:1.25rem;display:flex;align-items:center;gap:10px}
+.ficon{width:32px;height:32px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:16px}
+.fp{background:var(--rose-light)}.fm{background:var(--mint-light)}.fy{background:var(--yellow)}
+.form-grid{display:grid;grid-template-columns:1fr 1fr;gap:1rem}
+.form-grid.three{grid-template-columns:1fr 1fr 1fr}
+.field{display:flex;flex-direction:column;gap:7px}
+.field label{font-size:11px;font-weight:500;letter-spacing:.05em;text-transform:uppercase;color:var(--text-muted)}
+.field input,.field select,.field textarea{width:100%;background:var(--white);border:1px solid var(--border);border-radius:var(--radius);padding:12px 16px;font-size:15px;font-family:'DM Sans',sans-serif;color:var(--text);transition:border-color .2s;appearance:none}
+.field select{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%239A8070' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 14px center;background-color:var(--white);padding-right:36px}
+.field input:focus,.field select:focus,.field textarea:focus{outline:none;border-color:var(--rose);box-shadow:0 0 0 3px rgba(212,83,126,.08)}
+.field textarea{min-height:80px;resize:vertical;line-height:1.6}
+.gen-btn{width:100%;background:var(--rose);color:white;border:none;border-radius:var(--radius);padding:17px;font-size:16px;font-weight:500;font-family:'DM Sans',sans-serif;cursor:pointer;transition:all .2s;margin-top:.5rem;display:flex;align-items:center;justify-content:center;gap:10px}
+.gen-btn:hover{opacity:.88;transform:translateY(-1px)}
+.gen-btn:disabled{opacity:.5;cursor:not-allowed;transform:none}
+.err{background:#FEF2F2;color:#991B1B;border:1px solid #FECACA;border-radius:var(--radius);padding:12px 16px;font-size:14px;margin-top:.875rem}
+
+/* RESULT */
+#result-wrap{display:none;background:var(--cream);padding:3rem}
+.result-inner{max-width:900px;margin:0 auto}
+.plan-sections{display:grid;gap:1.25rem}
+.plan-card{background:var(--white);border:.5px solid var(--border);border-radius:var(--radius-lg);padding:1.75rem 2rem;animation:up .4s ease both}
+@keyframes up{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
+.plan-card:nth-child(1){animation-delay:.05s}.plan-card:nth-child(2){animation-delay:.1s}.plan-card:nth-child(3){animation-delay:.15s}.plan-card:nth-child(4){animation-delay:.2s}.plan-card:nth-child(5){animation-delay:.25s}.plan-card:nth-child(6){animation-delay:.3s}.plan-card:nth-child(7){animation-delay:.35s}.plan-card:nth-child(8){animation-delay:.4s}
+.plan-card.rose{background:var(--rose-light);border-color:var(--rose-mid)}
+.plan-card.mint{background:var(--mint-light);border-color:var(--mint)}
+.plan-card.yel{background:var(--yellow);border-color:#e8d090}
+.plan-card-hdr{display:flex;align-items:center;gap:12px;margin-bottom:1rem;padding-bottom:1rem;border-bottom:.5px solid rgba(212,83,126,.1)}
+.plan-icon{width:38px;height:38px;border-radius:12px;background:var(--rose-light);display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0}
+.plan-card-title{font-family:'Playfair Display',serif;font-size:18px;font-weight:700;color:var(--text)}
+.plan-content{font-size:14px;color:var(--text);line-height:1.85;white-space:pre-wrap}
+.shop-card{background:var(--dark);border-radius:var(--radius-lg);padding:1.75rem 2rem;margin-top:0}
+.shop-card-title{font-family:'Playfair Display',serif;font-size:18px;font-weight:700;color:white;margin-bottom:.5rem}
+.shop-card-sub{font-size:13px;color:rgba(255,255,255,.5);margin-bottom:1.25rem}
+.shop-btns{display:flex;flex-wrap:wrap;gap:.75rem}
+.shop-btn{color:white;border-radius:99px;padding:10px 20px;font-size:13px;font-weight:500;text-decoration:none;transition:opacity .2s}
+.shop-btn:hover{opacity:.85}
+.shop-btn.bol{background:#0071CE}
+.shop-btn.action{background:#E63329}
+.shop-btn.hema{background:#1A1A1A}
+.shop-btn.pin{background:#E60023}
+.affiliate-note{font-size:11px;color:rgba(255,255,255,.3);margin-top:.875rem}
+.pin-bar{background:var(--rose-light);border-radius:var(--radius);padding:1rem 1.25rem;display:flex;align-items:center;justify-content:space-between;gap:1rem;margin-bottom:1.25rem}
+.pin-bar p{font-size:14px;color:var(--burgundy)}
+.pin-btn{background:#E60023;color:white;border-radius:99px;padding:8px 18px;font-size:13px;font-weight:500;text-decoration:none;white-space:nowrap}
+.loading{text-align:center;padding:4rem 2rem}
+.loading-spin{width:52px;height:52px;border:3px solid var(--rose-mid);border-top-color:var(--rose);border-radius:50%;animation:spin .8s linear infinite;margin:0 auto 1.5rem}
+@keyframes spin{to{transform:rotate(360deg)}}
+.spin{width:18px;height:18px;border:2px solid rgba(255,255,255,.3);border-top-color:white;border-radius:50%;animation:spin .7s linear infinite}
+
+/* NEWSLETTER */
+.newsletter{background:var(--rose);padding:4rem 3rem;text-align:center}
+.newsletter h2{font-family:'Playfair Display',serif;font-size:32px;font-weight:700;color:white;margin-bottom:.75rem}
+.newsletter p{color:rgba(255,255,255,.8);margin-bottom:2rem;font-size:15px}
+.nl-form{display:flex;gap:.75rem;max-width:460px;margin:0 auto}
+.nl-form input{flex:1;padding:12px 16px;border-radius:99px;border:none;font-size:15px;font-family:'DM Sans',sans-serif}
+.nl-form button{background:var(--dark);color:white;border:none;border-radius:99px;padding:12px 24px;font-size:14px;font-weight:500;font-family:'DM Sans',sans-serif;cursor:pointer;white-space:nowrap}
+
+/* FOOTER */
+footer{background:var(--dark);color:white;padding:3rem}
+.ft-grid{display:grid;grid-template-columns:2fr 1fr 1fr 1fr;gap:3rem;margin-bottom:2rem}
+.ft-brand{font-family:'Dancing Script',cursive;font-size:26px;color:var(--rose);display:block;text-decoration:none;margin-bottom:.75rem}
+.ft-desc{font-size:13px;color:rgba(255,255,255,.38);line-height:1.7}
+.ft-col h4{font-size:11px;font-weight:500;letter-spacing:.1em;text-transform:uppercase;color:rgba(255,255,255,.4);margin-bottom:.875rem}
+.ft-col a{display:block;font-size:13px;color:rgba(255,255,255,.55);text-decoration:none;margin-bottom:.5rem;transition:color .2s}
+.ft-col a:hover{color:var(--rose)}
+.ft-bottom{border-top:.5px solid rgba(255,255,255,.08);padding-top:1.5rem;display:flex;justify-content:space-between;align-items:center}
+.ft-copy{font-size:12px;color:rgba(255,255,255,.28)}
+
+/* UTILS */
+.sec-eye{font-size:11px;font-weight:500;letter-spacing:.12em;text-transform:uppercase;color:var(--rose);display:block;margin-bottom:.75rem}
+.sec-title{font-family:'Playfair Display',serif;font-size:clamp(26px,3.5vw,40px);font-weight:700;color:var(--text);margin-bottom:.75rem}
+.sec-title em{font-style:italic;color:var(--rose)}
+.btn-p{background:var(--rose);color:white;border:none;border-radius:99px;padding:13px 26px;font-size:15px;font-weight:500;font-family:'DM Sans',sans-serif;cursor:pointer;transition:all .2s;text-decoration:none;display:inline-block}
+.btn-p:hover{opacity:.88;transform:translateY(-1px)}
+.btn-g{background:transparent;color:var(--text-muted);border:1px solid var(--border);border-radius:99px;padding:11px 22px;font-size:14px;font-weight:500;font-family:'DM Sans',sans-serif;cursor:pointer;text-decoration:none;display:inline-block;transition:all .2s}
+.btn-g:hover{border-color:var(--rose);color:var(--rose)}
+.center{max-width:960px;margin:0 auto}
+
+@media(max-width:900px){
+  .hero{grid-template-columns:1fr}
+  .hero-right{min-height:50vh}
+  .how-grid,.ex-grid,.rev-grid,.blog-grid,.ft-grid{grid-template-columns:1fr}
+  .form-grid,.form-grid.three{grid-template-columns:1fr}
+  nav{padding:1rem 1.5rem}
+  .nav-links{display:none}
+  .form-wrap,.ex-section,.reviews,.blog-section,.newsletter,footer,#result-wrap{padding-left:1.5rem;padding-right:1.5rem}
+  .sponsor-bar{margin:0 1.5rem}
+}
+</style>
+</head>
+<body>
+
+<!-- EDIT BAR -->
+<div class="edit-bar" id="editBar">
+  <div class="edit-bar-left">
+    <div class="edit-dot"></div>
+    <span>Bewerkingsmodus actief — klik op tekst om te bewerken</span>
+  </div>
+  <div style="display:flex;gap:.5rem">
+    <button class="btn-reset" onclick="resetEdits()">Reset alles</button>
+    <button class="btn-save" onclick="saveEdits()">Wijzigingen opslaan</button>
+    <button onclick="toggleEditMode()">Sluiten</button>
+  </div>
+</div>
+
+<nav>
+  <a href="index.html" class="nav-logo">Feestplanner<span>Planning met plezier</span></a>
+  <ul class="nav-links">
+    <li><a href="#form" class="active">Plan maken</a></li>
+    <li><a href="voorbeelden.html">Voorbeelden</a></li>
+    <li><a href="blog.html">Blog</a></li>
+  </ul>
+  <div class="nav-right">
+    <button class="nav-edit-btn" onclick="toggleEditMode()" title="Teksten bewerken">✏️ Bewerken</button>
+    <a href="#form" class="nav-cta">Start gratis</a>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-left">
+    <div class="pill">AI-gestuurde feestplanning</div>
+    <h1 style="font-family:'Playfair Display',serif;font-size:clamp(38px,5vw,62px);font-weight:900;line-height:1.05;margin-bottom:1.25rem">
+      <span data-editable data-key="hero-line1" contenteditable="false">Het perfecte</span><br>
+      <span data-editable data-key="hero-line2" contenteditable="false">feestje voor</span><br>
+      <em style="color:var(--rose)" data-editable data-key="hero-em" contenteditable="false">jouw kind.</em>
+    </h1>
+    <p style="font-size:16px;color:var(--text-muted);line-height:1.7;max-width:420px;margin-bottom:2.5rem" data-editable data-key="hero-desc" contenteditable="false">
+      Vul een paar gegevens in en krijg direct een compleet, coherent feestplan — van concept tot boodschappenlijst. Gratis. In 5 minuten.
+    </p>
+    <div style="display:flex;gap:1rem;align-items:center;flex-wrap:wrap">
+      <a href="#form" class="btn-p">Maak mijn feestplan</a>
+      <a href="voorbeelden.html" class="btn-g">Bekijk voorbeelden</a>
+    </div>
+    <div class="hero-stats">
+      <div><span class="stat-n" data-editable data-key="stat1" contenteditable="false">5 min</span><span class="stat-l">tot een volledig plan</span></div>
+      <div><span class="stat-n" data-editable data-key="stat2" contenteditable="false">8</span><span class="stat-l">onderdelen uitgewerkt</span></div>
+      <div><span class="stat-n" data-editable data-key="stat3" contenteditable="false">100%</span><span class="stat-l">op maat gemaakt</span></div>
+    </div>
+  </div>
+  <div class="hero-right">
+    <div class="deco d1"></div><div class="deco d2"></div><div class="deco d3"></div>
+    <div class="preview-card">
+      <div style="font-size:10px;font-weight:500;letter-spacing:.1em;text-transform:uppercase;color:var(--text-muted);margin-bottom:.75rem">Voorbeeldplan</div>
+      <div style="font-family:'Playfair Display',serif;font-size:24px;font-weight:700;color:var(--text);margin-bottom:.2rem">Modern Pastel</div>
+      <div style="font-family:'Dancing Script',cursive;font-size:30px;color:var(--coral);margin-bottom:.875rem">Carnival</div>
+      <p style="font-size:13px;color:var(--text-muted);margin-bottom:1rem;line-height:1.6">Een editorieel carnavalthema met pastelkleuren, zachte ballonnen en vintage signage.</p>
+      <div style="display:flex;flex-wrap:wrap;gap:6px;margin-bottom:1rem">
+        <span class="tag">6 jaar</span><span class="tag m">Tuin</span><span class="tag y">€150</span>
+      </div>
+      <div style="background:var(--mint-light);border-radius:var(--radius);padding:.875rem">
+        <div style="font-size:10px;font-weight:500;letter-spacing:.08em;text-transform:uppercase;color:#1a6b50;margin-bottom:4px">De vibe</div>
+        <div style="font-size:13px;color:var(--text);line-height:1.5">Zachte mint en roze ballonnen, houten accessoires en handgeschilderde teksten.</div>
+      </div>
+      <div style="display:flex;gap:8px;margin-top:1rem">
+        <div style="width:28px;height:28px;border-radius:50%;background:#F5C4B3"></div>
+        <div style="width:28px;height:28px;border-radius:50%;background:#B8E0D2"></div>
+        <div style="width:28px;height:28px;border-radius:50%;background:#FAE8C0"></div>
+        <div style="width:28px;height:28px;border-radius:50%;background:#D4537E"></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- THEMES STRIP -->
+<div class="strip">
+  <span class="strip-lbl">Populaire thema's</span>
+  <a href="voorbeelden/dinosaurus-feestje.html">🦕 Dinosaurus</a>
+  <a href="voorbeelden/prinsessen-feestje.html">👑 Prinsessen</a>
+  <a href="voorbeelden/ruimte-feestje.html">🚀 Ruimte</a>
+  <a href="voorbeelden/jungle-feestje.html">🌿 Jungle</a>
+  <a href="voorbeelden/zeemeermin-feestje.html">🧜 Zeemeermin</a>
+  <a href="voorbeelden/boerderij-feestje.html">🐄 Boerderij</a>
+  <a href="voorbeelden/circus-feestje.html">🎪 Circus</a>
+  <a href="voorbeelden/auto-feestje.html">🚗 Auto's</a>
+  <a href="voorbeelden/regenboog-feestje.html">🌈 Regenboog</a>
+  <a href="voorbeelden/piraten-feestje.html">🏴‍☠️ Piraten</a>
+</div>
+
+<!-- HOW -->
+<section class="how" id="how">
+  <div class="center">
+    <span class="sec-eye" style="color:var(--blush)">Hoe het werkt</span>
+    <h2 style="font-family:'Playfair Display',serif;font-size:36px;font-weight:700;color:white">
+      Eenvoudig. Snel. <em style="color:var(--blush)">Magisch.</em>
+    </h2>
+    <div class="how-grid">
+      <div class="how-card">
+        <div class="how-n">01</div>
+        <h3 data-editable data-key="how1-title" contenteditable="false">Vertel ons over het feestje</h3>
+        <p data-editable data-key="how1-desc" contenteditable="false">Leeftijd, thema, locatie, aantal kinderen en budget — ingevuld in 2 minuten.</p>
+      </div>
+      <div class="how-card">
+        <div class="how-n">02</div>
+        <h3 data-editable data-key="how2-title" contenteditable="false">AI bouwt jouw plan</h3>
+        <p data-editable data-key="how2-desc" contenteditable="false">We genereren een volledig coherent concept: setup, eten, activiteiten en boodschappenlijst.</p>
+      </div>
+      <div class="how-card">
+        <div class="how-n">03</div>
+        <h3 data-editable data-key="how3-title" contenteditable="false">Feest vieren</h3>
+        <p data-editable data-key="how3-desc" contenteditable="false">Print je plan, ga shoppen en geniet van een doordacht feestje zonder stress.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SPONSOR SLOT -->
+<div style="padding:1.5rem 0;background:var(--cream)">
+  <div class="sponsor-bar center">
+    <div>
+      <div class="sponsor-label">Aanbevolen partner</div>
+      <div class="sponsor-text" data-editable data-key="sponsor-text" contenteditable="false">Feestartikelen.be — de grootste feestwinkel van België. Gratis levering vanaf €40.</div>
+    </div>
+    <a href="#" class="sponsor-btn" data-editable data-key="sponsor-btn" contenteditable="false">Bekijk het aanbod →</a>
+  </div>
+</div>
+
+<!-- EXAMPLES -->
+<section class="ex-section">
+  <div class="center">
+    <span class="sec-eye">Voorbeeldplannen</span>
+    <div style="display:flex;justify-content:space-between;align-items:flex-end;flex-wrap:wrap;gap:1rem">
+      <h2 class="sec-title">Laat je <em>inspireren.</em></h2>
+      <a href="voorbeelden.html" class="btn-g" style="margin-bottom:.5rem">Alle voorbeelden →</a>
+    </div>
+    <div class="ex-grid">
+      <a href="voorbeelden/dinosaurus-feestje.html" class="ex-card">
+        <div class="ex-img" style="background:#EAF3DE">🦕</div>
+        <div class="ex-body">
+          <div class="ex-cat">Avontuur & natuur</div>
+          <div class="ex-title">Dino Expedition</div>
+          <span class="ex-script">Fossiel avontuur</span>
+          <div class="ex-meta">3–7 jaar · Tuin · €100–€150</div>
+          <div class="tags"><span class="tag m">Buiten</span><span class="tag">DIY-vriendelijk</span><span class="tag y">Budget</span></div>
+        </div>
+      </a>
+      <a href="voorbeelden/prinsessen-feestje.html" class="ex-card">
+        <div class="ex-img" style="background:#FBEAF0">👑</div>
+        <div class="ex-body">
+          <div class="ex-cat">Magisch & sprookjes</div>
+          <div class="ex-title">Royal Garden Party</div>
+          <span class="ex-script">Prinsessen dromenland</span>
+          <div class="ex-meta">4–8 jaar · Thuis · €150–€250</div>
+          <div class="tags"><span class="tag">Pinterest-stijl</span><span class="tag m">Elegant</span></div>
+        </div>
+      </a>
+      <a href="voorbeelden/ruimte-feestje.html" class="ex-card">
+        <div class="ex-img" style="background:#E6F1FB">🚀</div>
+        <div class="ex-body">
+          <div class="ex-cat">Avontuur & wetenschap</div>
+          <div class="ex-title">Space Mission Party</div>
+          <span class="ex-script">Galactisch avontuur</span>
+          <div class="ex-meta">5–9 jaar · Binnen · €100–€150</div>
+          <div class="tags"><span class="tag">Jongens & meisjes</span><span class="tag y">Budget</span></div>
+        </div>
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- REVIEWS -->
+<section class="reviews">
+  <div class="center">
+    <span class="sec-eye">Wat ouders zeggen</span>
+    <h2 class="sec-title">Duizenden blije <em>ouders.</em></h2>
+    <div class="rev-grid">
+      <div class="rev-card">
+        <div class="rev-stars">★★★★★</div>
+        <p class="rev-text" data-editable data-key="rev1" contenteditable="false">"In 5 minuten had ik een compleet plan dat ik zelf nooit zo mooi bedacht had. Het dinosaurus-feestje van mijn zoontje was een absolute hit!"</p>
+        <div class="rev-author" data-editable data-key="rev1-author" contenteditable="false">— Lies V., mama van Finn (5)</div>
+      </div>
+      <div class="rev-card">
+        <div class="rev-stars">★★★★★</div>
+        <p class="rev-text" data-editable data-key="rev2" contenteditable="false">"Eindelijk een tool die niet alleen ideeën geeft maar ook een echte boodschappenlijst met prijzen. Zo handig!"</p>
+        <div class="rev-author" data-editable data-key="rev2-author" contenteditable="false">— Sarah M., mama van Emma (7)</div>
+      </div>
+      <div class="rev-card">
+        <div class="rev-stars">★★★★★</div>
+        <p class="rev-text" data-editable data-key="rev3" contenteditable="false">"Het plan was zo coherent — alles paste bij elkaar. Mijn dochter dacht dat ik een professional had ingehuurd!"</p>
+        <div class="rev-author" data-editable data-key="rev3-author" contenteditable="false">— Tom D., papa van Nora (6)</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- BLOG -->
+<section class="blog-section">
+  <div class="center">
+    <span class="sec-eye">Tips & inspiratie</span>
+    <div style="display:flex;justify-content:space-between;align-items:flex-end;flex-wrap:wrap;gap:1rem">
+      <h2 class="sec-title">Feestplanning <em>made easy.</em></h2>
+      <a href="blog.html" class="btn-g" style="margin-bottom:.5rem">Alle artikelen →</a>
+    </div>
+    <div class="blog-grid">
+      <a href="blog/kinderfeestje-budget.html" class="blog-card">
+        <div class="blog-img" style="background:var(--yellow)">💰</div>
+        <div class="blog-body">
+          <div class="blog-cat">Budget & planning</div>
+          <div class="blog-title">Kinderfeestje met €100 budget — zo doe je dat</div>
+          <div class="blog-exc">Realistisch budgetplan, beste koopjes en 5 gratis DIY-ideeën.</div>
+        </div>
+      </a>
+      <a href="blog/diy-decoratie.html" class="blog-card">
+        <div class="blog-img" style="background:var(--rose-light)">🎨</div>
+        <div class="blog-body">
+          <div class="blog-cat">DIY & decoratie</div>
+          <div class="blog-title">10 DIY decoratie-ideeën die écht werken</div>
+          <div class="blog-exc">Van ballonboog tot tafeldecoratie die er duurder uitziet dan het is.</div>
+        </div>
+      </a>
+      <a href="blog/eerste-verjaardag.html" class="blog-card">
+        <div class="blog-img" style="background:var(--mint-light)">🎂</div>
+        <div class="blog-body">
+          <div class="blog-cat">Eerste verjaardag</div>
+          <div class="blog-title">Eerste verjaardag organiseren — wat je wél en niet moet doen</div>
+          <div class="blog-exc">Een feest voor 1 jaar is eigenlijk voor de ouders. Zo doe je het goed.</div>
+        </div>
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- FORM -->
+<div class="form-wrap" id="form">
+  <div class="form-section">
+    <span class="sec-eye">Jouw feestje</span>
+    <h2 class="sec-title">Maak jouw <em>gratis plan.</em></h2>
+    <p style="font-size:15px;color:var(--text-muted);margin-bottom:2.5rem;max-width:520px" data-editable data-key="form-desc" contenteditable="false">
+      Hoe meer details, hoe beter het plan. Vul alles in en ontvang een uniek, coherent feestconcept.
+    </p>
+
+    <div class="form-card">
+      <div class="form-card-title"><div class="ficon fp">🎂</div>Over het kind</div>
+      <div class="form-grid three">
+        <div class="field"><label>Naam (optioneel)</label><input type="text" id="f-name" placeholder="bijv. Flynn"></div>
+        <div class="field">
+          <label>Leeftijd *</label>
+          <select id="f-age">
+            <option value="">Kies leeftijd...</option>
+            <option value="1">1 jaar</option>
+            <option value="2">2 jaar</option>
+            <option value="3">3 jaar</option>
+            <option value="4">4 jaar</option>
+            <option value="5">5 jaar</option>
+            <option value="6">6 jaar</option>
+            <option value="7">7 jaar</option>
+            <option value="8">8 jaar</option>
+            <option value="9">9 jaar</option>
+            <option value="10">10 jaar</option>
+          </select>
+        </div>
+        <div class="field"><label>Thema / interesse *</label><input type="text" id="f-theme" placeholder="bijv. dinosaurussen, prinsessen..."></div>
+      </div>
+    </div>
+
+    <div class="form-card">
+      <div class="form-card-title"><div class="ficon fm">📍</div>Praktische details</div>
+      <div class="form-grid three">
+        <div class="field">
+          <label>Locatie *</label>
+          <select id="f-loc">
+            <option value="">Kies locatie...</option>
+            <option value="thuis (binnen)">Thuis (binnen)</option>
+            <option value="tuin">Tuin</option>
+            <option value="park">Park</option>
+            <option value="feestzaal">Feestzaal</option>
+          </select>
+        </div>
+        <div class="field">
+          <label>Aantal kinderen *</label>
+          <select id="f-kids">
+            <option value="">Kies...</option>
+            <option value="5 tot 8 kinderen">5–8 kinderen</option>
+            <option value="8 tot 12 kinderen">8–12 kinderen</option>
+            <option value="12 tot 20 kinderen">12–20 kinderen</option>
+            <option value="meer dan 20 kinderen">20+ kinderen</option>
+          </select>
+        </div>
+        <div class="field">
+          <label>Budget *</label>
+          <select id="f-budget">
+            <option value="">Kies budget...</option>
+            <option value="€50 tot €100">€50 – €100</option>
+            <option value="€100 tot €150">€100 – €150</option>
+            <option value="€150 tot €250">€150 – €250</option>
+            <option value="€250 tot €400">€250 – €400</option>
+          </select>
+        </div>
+      </div>
+    </div>
+
+    <div class="form-card">
+      <div class="form-card-title"><div class="ficon fy">✨</div>Stijl & wensen</div>
+      <div class="form-grid">
+        <div class="field">
+          <label>Stijlvoorkeur *</label>
+          <select id="f-style">
+            <option value="">Kies stijl...</option>
+            <option value="warm en gezellig">Warm & gezellig</option>
+            <option value="kleurrijk en speels">Kleurrijk & speels</option>
+            <option value="minimalistisch (Pinterest-stijl)">Minimalistisch (Pinterest)</option>
+            <option value="avontuurlijk en actief">Avontuurlijk & actief</option>
+            <option value="natuurlijk, geen plastic">Natuurlijk (geen plastic)</option>
+          </select>
+        </div>
+        <div class="field"><label>Extra wensen (optioneel)</label><input type="text" id="f-extra" placeholder="bijv. glutenvrij, geen ballonnen..."></div>
+      </div>
+    </div>
+
+    <button class="gen-btn" id="genBtn" onclick="generatePlan()">
+      <span id="btn-txt">Genereer mijn gratis feestplan</span>
+    </button>
+    <div id="err-area"></div>
+  </div>
+</div>
+
+<!-- RESULT -->
+<div id="result-wrap">
+  <div class="result-inner" id="result-inner"></div>
+</div>
+
+<!-- NEWSLETTER -->
+<section class="newsletter">
+  <h2 data-editable data-key="nl-title" contenteditable="false">Wekelijkse feestinspiratie<br>in jouw inbox.</h2>
+  <p data-editable data-key="nl-desc" contenteditable="false">Seizoensthema's, DIY-tutorials en kortingscodes — elke week gratis.</p>
+  <div class="nl-form">
+    <input type="email" id="nl-email" placeholder="jouw@emailadres.be">
+    <button onclick="subscribeNl()">Inschrijven</button>
+  </div>
+  <p id="nl-msg" style="margin-top:1rem;font-size:13px;color:rgba(255,255,255,.8);display:none">Bedankt! Je staat op de lijst. 🎉</p>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="ft-grid">
+    <div>
+      <a href="index.html" class="ft-brand">Feestplanner</a>
+      <p class="ft-desc" data-editable data-key="footer-desc" contenteditable="false">Het meest complete AI-feestplanningsplatform voor ouders in België en Nederland.</p>
+    </div>
+    <div class="ft-col"><h4>Tool</h4><a href="#form">Plan maken</a><a href="voorbeelden.html">Voorbeelden</a><a href="blog.html">Blog</a></div>
+    <div class="ft-col"><h4>Thema's</h4><a href="voorbeelden/dinosaurus-feestje.html">Dinosaurus</a><a href="voorbeelden/prinsessen-feestje.html">Prinsessen</a><a href="voorbeelden/ruimte-feestje.html">Ruimte</a><a href="voorbeelden/jungle-feestje.html">Jungle</a></div>
+    <div class="ft-col"><h4>Info</h4><a href="#">Over ons</a><a href="#">Privacy</a><a href="#">Contact</a></div>
+  </div>
+  <div class="ft-bottom">
+    <span class="ft-copy">© 2025 Feestplanner — Gemaakt met ♥ in België</span>
+    <span class="ft-copy">Sommige links zijn affiliate links</span>
+  </div>
+</footer>
+
+<script>
+// ── EDIT MODE ──────────────────────────────────────────────
+const STORAGE_KEY = 'fp_edits';
+
+function loadEdits() {
+  try {
+    const saved = JSON.parse(localStorage.getItem(STORAGE_KEY) || '{}');
+    document.querySelectorAll('[data-editable]').forEach(el => {
+      const key = el.dataset.key;
+      if (saved[key]) el.innerHTML = saved[key];
+    });
+  } catch(e) {}
+}
+
+function saveEdits() {
+  const data = {};
+  document.querySelectorAll('[data-editable]').forEach(el => {
+    data[el.dataset.key] = el.innerHTML;
+  });
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+  showToast('Wijzigingen opgeslagen!');
+}
+
+function resetEdits() {
+  if (!confirm('Alle tekstaanpassingen resetten naar de originele versie?')) return;
+  localStorage.removeItem(STORAGE_KEY);
+  location.reload();
+}
+
+function toggleEditMode() {
+  const body = document.body;
+  const bar = document.getElementById('editBar');
+  const isEdit = body.classList.toggle('edit-mode');
+  bar.classList.toggle('visible', isEdit);
+  document.querySelectorAll('[data-editable]').forEach(el => {
+    el.contentEditable = isEdit ? 'true' : 'false';
+  });
+  if (!isEdit) saveEdits();
+}
+
+function showToast(msg) {
+  const t = document.createElement('div');
+  t.textContent = msg;
+  t.style.cssText = 'position:fixed;bottom:2rem;right:2rem;background:var(--dark);color:white;padding:12px 20px;border-radius:12px;font-size:14px;z-index:9999;animation:up .3s ease';
+  document.body.appendChild(t);
+  setTimeout(() => t.remove(), 2500);
+}
+
+loadEdits();
+
+// ── PLAN GENERATOR ─────────────────────────────────────────
+async function generatePlan() {
+  const name    = document.getElementById('f-name').value.trim();
+  const age     = document.getElementById('f-age').value;
+  const theme   = document.getElementById('f-theme').value.trim();
+  const loc     = document.getElementById('f-loc').value;
+  const kids    = document.getElementById('f-kids').value;
+  const budget  = document.getElementById('f-budget').value;
+  const style   = document.getElementById('f-style').value;
+  const extra   = document.getElementById('f-extra').value.trim();
+  const errArea = document.getElementById('err-area');
+  errArea.innerHTML = '';
+
+  if (!age || !theme || !loc || !kids || !budget || !style) {
+    errArea.innerHTML = '<div class="err">Vul alle verplichte velden (*) in.</div>';
+    return;
+  }
+
+  const btn = document.getElementById('genBtn');
+  btn.disabled = true;
+  btn.innerHTML = '<div class="spin"></div><span>Feestplan wordt gemaakt...</span>';
+
+  const resultWrap = document.getElementById('result-wrap');
+  const resultInner = document.getElementById('result-inner');
+  const childLabel = name || 'het kind';
+
+  resultWrap.style.display = 'block';
+  resultInner.innerHTML = `<div class="loading"><div class="loading-spin"></div><p style="font-family:'Playfair Display',serif;font-size:20px;font-weight:700;color:var(--text);margin-bottom:.5rem">Jouw feestplan wordt gemaakt</p><p style="font-size:14px;color:var(--text-muted)">We bedenken het perfecte concept voor ${childLabel}...</p></div>`;
+  resultWrap.scrollIntoView({ behavior: 'smooth', block: 'start' });
+
+  try {
+    // Calls the Netlify Function — works on netlify.com
+    const res = await fetch('/api/generate-plan', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ name, age, theme, location: loc, kids, budget, style, extra })
+    });
+
+    if (!res.ok) {
+      const e = await res.json().catch(() => ({}));
+      throw new Error(e.error || `Server fout (${res.status})`);
+    }
+
+    const data = await res.json();
+    renderResult(data.plan, childLabel, { age, theme, location: loc, kids, budget });
+
+  } catch (err) {
+    resultWrap.style.display = 'none';
+    errArea.innerHTML = `<div class="err">❌ ${err.message}<br><small>Zorg dat je de website via Netlify host en je API-sleutel hebt ingesteld.</small></div>`;
+  }
+
+  btn.disabled = false;
+  btn.innerHTML = '<span id="btn-txt">Genereer mijn gratis feestplan</span>';
+}
+
+function renderResult(text, childLabel, meta) {
+  const defs = [
+    { key:'CONCEPT',        label:'Concept & sfeer',     icon:'🎪', cls:'rose' },
+    { key:'KLEURENPALET',   label:'Kleurenpalet & stijl', icon:'🎨', cls:'mint' },
+    { key:'SETUP',          label:'Party setup',          icon:'🏠', cls:'' },
+    { key:'BOODSCHAPPENLIJST', label:'Boodschappenlijst', icon:'🛒', cls:'yel' },
+    { key:'DIY VS KOPEN',   label:'DIY vs kopen',         icon:'🔨', cls:'' },
+    { key:'ETEN EN TAART',  label:'Eten & taart',         icon:'🍰', cls:'mint' },
+    { key:'ACTIVITEITEN',   label:'Activiteiten',         icon:'🎮', cls:'' },
+    { key:'TIJDLIJN',       label:'Tijdlijn',             icon:'📅', cls:'rose' }
+  ];
+
+  const lines = text.split('\n');
+  const blocks = [];
+  let cur = null;
+  for (const ln of lines) {
+    const m = defs.find(d => ln.trim().startsWith(d.key));
+    if (m) { if (cur) blocks.push(cur); cur = { ...m, lines: [] }; }
+    else if (cur) cur.lines.push(ln);
+  }
+  if (cur) blocks.push(cur);
+
+  const pinQ  = encodeURIComponent(meta.theme + ' kinderfeestje verjaardagsfeest');
+  const bolQ  = encodeURIComponent(meta.theme + ' kinderfeest decoratie');
+  const actQ  = encodeURIComponent(meta.theme);
+  const hemaQ = encodeURIComponent('kinderfeest ' + meta.theme);
+
+  const tagLabels = [`${meta.age} jaar`, meta.theme, meta.location, meta.kids, meta.budget];
+  const tagCls    = ['','m','y','','m'];
+  const tagsHTML  = tagLabels.map((t,i) => `<span class="tag ${tagCls[i]}">${t}</span>`).join('');
+
+  let cardsHTML = '';
+  for (const b of blocks) {
+    const content = b.lines.join('\n').trim();
+    if (!content) continue;
+    cardsHTML += `
+      <div class="plan-card ${b.cls}" style="animation-delay:${blocks.indexOf(b)*.05+.05}s">
+        <div class="plan-card-hdr">
+          <div class="plan-icon">${b.icon}</div>
+          <div class="plan-card-title">${b.label}</div>
+        </div>
+        <div class="plan-content">${content.replace(/</g,'&lt;').replace(/>/g,'&gt;')}</div>
+      </div>`;
+  }
+  if (!blocks.length) cardsHTML = `<div class="plan-card"><div class="plan-content">${text.replace(/</g,'&lt;')}</div></div>`;
+
+  document.getElementById('result-inner').innerHTML = `
+    <div style="margin-bottom:2rem">
+      <p style="font-size:10px;font-weight:500;letter-spacing:.12em;text-transform:uppercase;color:var(--rose);margin-bottom:.5rem">Jouw feestplan — klaar!</p>
+      <h2 style="font-family:'Playfair Display',serif;font-size:clamp(26px,4vw,38px);font-weight:900;color:var(--text);margin-bottom:1rem">Feestplan voor <em style="color:var(--rose)">${childLabel}</em></h2>
+      <div style="display:flex;flex-wrap:wrap;gap:8px;margin-bottom:1.5rem">${tagsHTML}</div>
+      <div style="display:flex;gap:.75rem;flex-wrap:wrap">
+        <button class="btn-p" onclick="window.print()">Print dit plan</button>
+        <button class="btn-g" onclick="resetForm()">Nieuw plan maken</button>
+      </div>
+    </div>
+
+    <div class="pin-bar">
+      <p>📌 Zoek visuele inspiratie voor <strong>${meta.theme}</strong> op Pinterest</p>
+      <a href="https://pinterest.com/search/pins/?q=${pinQ}" target="_blank" rel="noopener" class="pin-btn">Bekijk op Pinterest</a>
+    </div>
+
+    <div class="plan-sections">${cardsHTML}</div>
+
+    <div class="shop-card">
+      <div class="shop-card-title">🛍️ Bestel direct online</div>
+      <div class="shop-card-sub">Vind de items uit jouw boodschappenlijst bij deze winkels:</div>
+      <div class="shop-btns">
+        <a href="https://www.bol.com/nl/nl/s/?searchtext=${bolQ}" target="_blank" rel="noopener sponsored" class="shop-btn bol">bol.com →</a>
+        <a href="https://www.action.com/nl-be/zoeken/?q=${actQ}" target="_blank" rel="noopener" class="shop-btn action">Action →</a>
+        <a href="https://www.hema.nl/zoeken?q=${hemaQ}" target="_blank" rel="noopener" class="shop-btn hema">HEMA →</a>
+        <a href="https://pinterest.com/search/pins/?q=${pinQ}" target="_blank" rel="noopener" class="shop-btn pin">📌 Pinterest</a>
+      </div>
+      <div class="affiliate-note">Sommige links zijn affiliate links — je betaalt hetzelfde, wij ontvangen een kleine commissie. Zo blijft deze tool gratis.</div>
+    </div>
+
+    <div style="text-align:center;margin-top:2rem">
+      <button class="btn-g" onclick="resetForm()">Nieuw feestplan maken</button>
+    </div>`;
+}
+
+function resetForm() {
+  document.getElementById('result-wrap').style.display = 'none';
+  document.getElementById('result-inner').innerHTML = '';
+  document.getElementById('err-area').innerHTML = '';
+  document.getElementById('form').scrollIntoView({ behavior: 'smooth' });
+}
+
+// ── NEWSLETTER ─────────────────────────────────────────────
+function subscribeNl() {
+  const email = document.getElementById('nl-email').value;
+  if (email && email.includes('@')) {
+    document.getElementById('nl-msg').style.display = 'block';
+    document.getElementById('nl-email').value = '';
+  }
+}
+</script>
+</body>
+</html>
